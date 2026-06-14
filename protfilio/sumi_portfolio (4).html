@@ -1,0 +1,2596 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SUMI | Portfolio - Design Driven Value Translation</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter & Fraunces & Syne -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,700;0,9..144,900;1,9..144,300;1,9..144,400&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Fraunces', 'serif'], 
+                        syne: ['Syne', 'sans-serif'],
+                    },
+                    colors: {
+                        indigoDye: '#0D2F6B',
+                        bioGreen: '#2EE59D',
+                        darkBg: '#0A0A0A',
+                        cardBg: '#121212',
+                        creamPale: '#FFFDF6', 
+                        pastelPurple: '#E5C3FF',
+                        pastelOrange: '#FFE1B3',
+                        pastelGreen: '#CCFFD9',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #0A0A0A;
+            color: #E4E4E7;
+            overflow-x: hidden;
+        }
+
+        /* Cinematic Film Grain Overlay */
+        .film-grain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.035'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0A0A0A;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #222222;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #0D2F6B;
+        }
+
+        .glass-panel {
+            background: rgba(18, 18, 18, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .magnet-target {
+            transition: transform 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        /* Hide scrollbar but keep functionality */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* Entrance Stagger Reveal Animation classes */
+        .entrance-stagger {
+            will-change: transform, opacity;
+            transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Bouncy Letter-by-Letter Character Effects */
+        .bounce-char {
+            display: inline-block;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), color 0.2s ease;
+            cursor: pointer;
+            will-change: transform;
+        }
+        .bounce-char:hover {
+            transform: translateY(-16px) rotate(var(--rand-rot, 15deg)) scale(1.3);
+            color: var(--hover-color) !important;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased selection:bg-indigoDye selection:text-white">
+
+    <!-- Elegant Cinematic Page Loader -->
+    <div id="page-loader" class="fixed inset-0 bg-[#0A0A0A] z-[9999] flex flex-col items-center justify-center transition-all duration-[1000ms] cubic-bezier(0.85, 0, 0.15, 1)">
+        <div class="space-y-6 text-center max-w-xs w-full px-6">
+            <div class="font-syne text-2xl tracking-[0.4em] text-white font-extrabold flex items-center justify-center gap-2">
+                S U M I
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+            </div>
+            <div class="h-[1.5px] w-full bg-zinc-900 rounded-full overflow-hidden relative">
+                <div id="loader-bar" class="absolute top-0 left-0 h-full bg-[#FFFDF6] w-0 transition-all duration-150 ease-out"></div>
+            </div>
+            <div id="loader-percent" class="font-mono text-[9px] text-zinc-500 tracking-[0.25em] uppercase">
+                CALIBRATING SYSTEM 00%
+            </div>
+        </div>
+    </div>
+
+    <!-- Film Grain Effect -->
+    <div class="film-grain"></div>
+
+    <!-- Navigation Bar -->
+    <nav class="fixed top-0 left-0 w-full z-50 glass-panel border-b border-white/5 px-6 md:px-12 py-3 flex justify-between items-center">
+        <!-- Logo -->
+        <a href="#" class="font-syne text-lg tracking-[0.2em] font-extrabold text-white hover:text-indigo-400 transition-colors flex items-center gap-2">
+            S U M I
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+        </a>
+
+        <!-- Center Menu Links -->
+        <div class="hidden lg:flex items-center space-x-8 text-xs tracking-[0.2em] font-medium uppercase text-zinc-400">
+            <a href="#hero" class="hover:text-white transition-colors duration-300">Prologue</a>
+            <a href="#case-studies" class="hover:text-white transition-colors duration-300">Case Studies</a>
+            <a href="#ai-work" class="hover:text-white transition-colors duration-300">AI & Craft</a>
+            <a href="#reviews" class="hover:text-white transition-colors duration-300">Echoes</a>
+            <a href="#about" class="hover:text-white transition-colors duration-300">About</a>
+        </div>
+
+        <!-- Right Side Widgets (Interactive Resume Eye Pill & Slide-Reveal Email) -->
+        <div class="flex items-center gap-3">
+            <!-- Dynamic Eye Pill button -->
+            <a href="#about" class="hidden sm:flex items-center gap-3 px-4 py-2.5 bg-black border border-white/10 rounded-full text-xs font-mono text-zinc-300 hover:border-white/30 transition-all duration-300">
+                <span class="font-semibold tracking-wide">My Resume</span>
+                <!-- Interactive Eyeballs -->
+                <div class="flex gap-1 items-center">
+                    <div class="w-5 h-5 bg-white rounded-full flex items-center justify-center relative overflow-hidden shadow-inner eyeball">
+                        <div class="w-2.5 h-2.5 bg-black rounded-full absolute pupil transition-transform duration-75"></div>
+                    </div>
+                    <div class="w-5 h-5 bg-white rounded-full flex items-center justify-center relative overflow-hidden shadow-inner eyeball">
+                        <div class="w-2.5 h-2.5 bg-black rounded-full absolute pupil transition-transform duration-75"></div>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Double-face Hover-Reveal Email Pill button -->
+            <button onclick="copyEmail()" class="group relative overflow-hidden px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider border border-white/10 bg-white/5 text-zinc-200 transition-all duration-300 w-52 h-10 flex items-center justify-center">
+                <span class="absolute inset-0 flex items-center justify-center transition-all duration-300 ease-out group-hover:translate-y-10 group-hover:opacity-0 font-mono tracking-tight text-[11px]">
+                    17763473292@163.com
+                </span>
+                <span class="absolute inset-0 bg-[#FFFDF6] text-[#0A0A0A] flex items-center justify-center gap-2 font-black tracking-widest translate-y-[-40px] opacity-0 transition-all duration-300 ease-out group-hover:translate-y-0 group-hover:opacity-100 shadow-lg">
+                    COPY EMAIL <i class="fa-solid fa-copy text-[10px]"></i>
+                </span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Ambient Interactive Background Canvas -->
+    <div class="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+        <canvas id="ambient-canvas" class="w-full h-full opacity-35"></canvas>
+    </div>
+
+    <!-- Hero Section -->
+    <section id="hero" class="relative min-h-screen flex flex-col justify-center px-6 md:px-16 lg:px-24 pt-28 pb-12 z-10 w-full max-w-[1600px] mx-auto">
+        <div class="space-y-12 mt-12 relative w-full">
+            
+            <div class="absolute -top-16 right-10 lg:right-32 hidden sm:flex flex-col items-center rotate-6 select-none pointer-events-none">
+                <span class="bg-amber-100 text-darkBg font-serif italic text-xs px-3 py-1.5 rounded-xl shadow-lg border border-amber-200 font-bold">
+                    Yes, I design & code! ⚡️
+                </span>
+                <svg class="w-12 h-12 text-amber-200 mt-1" fill="none" viewBox="0 0 50 50">
+                    <path d="M10,10 Q25,5 30,35 M30,35 L20,32 M30,35 L33,23" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </div>
+
+            <div class="entrance-stagger opacity-0 translate-y-8 flex items-center gap-3">
+                <span class="text-xs uppercase tracking-[0.4em] font-semibold text-zinc-500 block">
+                    [ ACT I: PROLOGUE ]
+                </span>
+                <span class="h-[1px] w-12 bg-zinc-800"></span>
+                <span class="text-[10px] font-mono text-indigo-400 bg-indigo-500/10 px-2.5 py-1 rounded-full uppercase tracking-widest font-bold flex items-center gap-1.5">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+                    Available for magic
+                </span>
+            </div>
+
+            <!-- Highly dynamic letter-by-letter bouncy text header -->
+            <h1 class="entrance-stagger opacity-0 translate-y-8 font-serif text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-[#FFFDF6] leading-tight tracking-tight">
+                Product Designer at the intersection of <br class="hidden md:block">
+                <span id="hero-phrase-1" class="font-sans font-bold">Design Craft</span>, 
+                <span id="hero-phrase-2" class="font-light italic">Systems Thinking</span> <br class="hidden sm:block">
+                &amp; <span id="hero-phrase-3" class="font-sans font-bold underline decoration-wavy decoration-indigoDye">Human Empathy</span>.
+            </h1>
+
+            <div class="entrance-stagger opacity-0 translate-y-8 space-y-4 w-full max-w-5xl">
+                <p class="font-serif text-lg sm:text-2xl md:text-3xl text-zinc-300 leading-relaxed font-light italic">
+                    “Hi, I'm Sumi  ── 我在理性系统（SQL/生物反馈）与感性视觉（非遗扎染/高保真UI）的重叠地带游荡。我喜欢把人类那些混乱又复杂的痛点，梳理成优美而有温度的产品体验。”
+                </p>
+                <div class="flex flex-wrap gap-2 text-xs font-mono text-zinc-500 pt-2">
+                    <span class="bg-zinc-900 border border-white/5 px-3 py-1.5 rounded-full">🧠 Brain-Gut Axis Explorer</span>
+                    <span class="bg-zinc-900 border border-white/5 px-3 py-1.5 rounded-full">🎨 Indigo Dye Digitizer</span>
+                    <span class="bg-zinc-900 border border-white/5 px-3 py-1.5 rounded-full">👾 Tech-Design Hybrid</span>
+                </div>
+            </div>
+
+            <div class="entrance-stagger opacity-0 translate-y-8 flex flex-col sm:flex-row gap-4 pt-4">
+                <a href="#case-studies" class="magnet-target group px-8 py-4 bg-[#FFFDF6] text-darkBg rounded-full text-sm font-bold tracking-widest uppercase hover:bg-emerald-400 hover:text-darkBg transition-all duration-300 shadow-xl shadow-white/5 flex items-center justify-center gap-3">
+                    Deep Dive Cases
+                    <i class="fa-solid fa-arrow-down group-hover:translate-y-1 transition-transform"></i>
+                </a>
+                <a href="#ai-work" class="px-8 py-4 bg-transparent border border-white/10 text-white rounded-full text-sm font-semibold tracking-widest uppercase hover:bg-white/5 transition-all duration-300 flex items-center justify-center gap-2">
+                    🔮 Dynamic Sandbox
+                </a>
+            </div>
+        </div>
+        
+        <div class="absolute bottom-6 left-6 right-6 md:left-12 md:right-12 flex flex-wrap justify-between items-center text-[10px] tracking-[0.25em] text-zinc-500 uppercase font-medium border-t border-white/5 pt-4">
+            <div>CRAFT / UX-UI / AI-AGENT / WEARABLE HEALTHCARE</div>
+            <div class="hidden sm:block">GPA 3.7 · QILU UNIVERSITY OF TECHNOLOGY © 2026</div>
+        </div>
+    </section>
+
+    <!-- Act II: Wavy Portfolio Cards & UI Screen Showcase Section -->
+    <section id="case-studies" class="relative py-24 px-6 md:px-12 lg:px-20 border-t border-white/5 z-10 bg-[#0F0F12] overflow-hidden w-full">
+        <div class="max-w-[1600px] mx-auto space-y-20">
+            
+            <div class="text-center space-y-6">
+                <h2 class="font-serif text-4xl sm:text-5xl lg:text-6xl text-[#FFFDF6] font-normal tracking-wide">
+                    Featured Projects
+                </h2>
+                
+                <!-- Professional Tabs Switcher corresponding to screenshot -->
+                <div class="inline-flex items-center p-1.5 bg-[#1B1B1E] rounded-full gap-2 border border-white/5">
+                    <button id="tab-btn-cases" onclick="switchShowcaseTab('cases')" class="px-8 py-2.5 bg-[#FFFDF6] text-[#0A0A0A] font-sans font-medium text-xs sm:text-sm rounded-full transition-all duration-300 shadow-md">
+                        Case studies
+                    </button>
+                    <button id="tab-btn-screens" onclick="switchShowcaseTab('screens')" class="px-8 py-2.5 text-zinc-400 hover:text-white font-sans font-medium text-xs sm:text-sm rounded-full transition-all duration-300">
+                        UI screens
+                    </button>
+                    <button class="relative px-8 py-2.5 text-zinc-500 cursor-not-allowed font-sans font-medium text-xs sm:text-sm rounded-full">
+                        Side projects
+                        <span class="absolute -top-1 right-2 bg-rose-500/80 text-[8px] text-white px-1.5 py-0.5 rounded-full font-bold scale-75 tracking-tighter">Coming soon</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- TAB CONTAINER 1: Wavy Case Studies Grid (Upgraded with 3 screen mockups inside) -->
+            <div id="showcase-cases-grid" class="flex flex-col lg:flex-row justify-center items-center lg:items-stretch gap-10 lg:gap-12 pt-8 pb-16 perspective-1000 transition-all duration-500">
+                
+                <!-- Card 1: Sheechoes -->
+                <div class="relative w-full max-w-[620px] h-[480px] rounded-[32px] overflow-hidden group cursor-pointer z-10 bg-[#EEF2FF] hover:scale-[1.03] transition-all duration-500 shadow-2xl flex flex-col justify-between" onclick="openProjectDetail('sheechoes')">
+                    
+                    <!-- Top Area: Three Screen Mockups sliding on hover (Framer Parallax style) -->
+                    <div class="relative w-full h-[55%] overflow-hidden">
+                        
+                        <!-- Left Screen Mockup -->
+                        <div class="absolute bottom-[-20px] left-[6%] w-[130px] h-[210px] bg-[#121626] rounded-2xl shadow-xl border border-white/10 overflow-hidden transform -rotate-[12deg] translate-y-4 group-hover:translate-y-[-16px] group-hover:rotate-[-6deg] transition-all duration-500 ease-out z-10">
+                            <div class="w-full h-3 bg-black/40 flex justify-center items-center"><div class="w-8 h-1 bg-white/20 rounded-full"></div></div>
+                            <div class="p-2 space-y-2">
+                                <div class="w-full h-2 bg-blue-500/30 rounded-full"></div>
+                                <!-- User can easily add their image in this fallback/img -->
+                                <div class="w-full h-32 bg-zinc-800 rounded-lg overflow-hidden flex items-center justify-center">
+                                    <img src="780265SheEchoes：SheEchoes New Digital Ecosystem for Tie-dyeing Heritag1.jpg" alt="Left UI" class="w-full h-full object-cover hidden" onload="this.classList.remove('hidden')">
+                                    <i class="fa-solid fa-image text-zinc-600 text-lg"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Middle Screen Mockup (Most prominent) -->
+                        <div class="absolute bottom-[-30px] left-[39%] w-[140px] h-[230px] bg-[#EEF2FF] rounded-3xl shadow-2xl border-2 border-white/20 overflow-hidden transform translate-y-6 group-hover:translate-y-[-24px] group-hover:scale-105 transition-all duration-500 ease-out z-20">
+                            <div class="w-full h-3.5 bg-black/20 flex justify-center items-center"><div class="w-10 h-1.5 bg-black/10 rounded-full"></div></div>
+                            <div class="p-2.5 space-y-2">
+                                <div class="w-full h-2.5 bg-blue-500/20 rounded-full"></div>
+                                <div class="w-full h-36 bg-zinc-200 rounded-xl overflow-hidden flex items-center justify-center">
+                                    <img src="image_084b7c.jpg" alt="Middle UI" class="w-full h-full object-cover hidden" onload="this.classList.remove('hidden')">
+                                    <i class="fa-solid fa-image text-zinc-400 text-xl animate-pulse"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Screen Mockup -->
+                        <div class="absolute bottom-[-20px] right-[6%] w-[130px] h-[210px] bg-[#121626] rounded-2xl shadow-xl border border-white/10 overflow-hidden transform rotate-[12deg] translate-y-4 group-hover:translate-y-[-16px] group-hover:rotate-[6deg] transition-all duration-500 ease-out z-10">
+                            <div class="w-full h-3 bg-black/40 flex justify-center items-center"><div class="w-8 h-1 bg-white/20 rounded-full"></div></div>
+                            <div class="p-2 space-y-2">
+                                <div class="w-full h-2 bg-blue-500/30 rounded-full"></div>
+                                <div class="w-full h-32 bg-zinc-800 rounded-lg overflow-hidden flex items-center justify-center">
+                                    <img src="780265SheEchoes：SheEchoes New Digital Ecosystem for Tie-dyeing Heritag1.jpg" alt="Right UI" class="w-full h-full object-cover hidden" onload="this.classList.remove('hidden')">
+                                    <i class="fa-solid fa-image text-zinc-600 text-lg"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Hover View Badge popout matching screenshot video -->
+                        <div class="absolute bottom-4 right-6 px-4 py-2 bg-[#FFFDF6] text-darkBg rounded-full text-xs font-bold font-sans shadow-xl flex items-center gap-1.5 opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 ease-out z-30">
+                            <span>View</span>
+                            <i class="fa-solid fa-arrow-up-right-from-square text-[9px] translate-y-[-1px]"></i>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Wave / Details block -->
+                    <div class="relative w-full h-[45%] bg-[#2D6CE5] flex flex-col justify-end p-8 sm:p-10 z-10">
+                        <svg class="absolute bottom-full left-0 w-full h-[50px] text-[#2D6CE5] translate-y-[1px]" viewBox="0 0 1000 100" preserveAspectRatio="none" fill="currentColor">
+                            <path d="M0,100 L0,15 C150,15 280,85 450,85 L1000,85 L1000,100 Z" />
+                        </svg>
+
+                        <div class="relative z-20 space-y-2 text-left">
+                            <span class="text-[10px] font-bold text-white/50 uppercase tracking-widest block font-mono">
+                                FINTECH . WEB 3
+                            </span>
+                            
+                            <h3 class="text-xl sm:text-2xl font-serif font-bold text-white leading-tight pr-12">
+                                Sheechoes: New Digital Ecosystem for Tie-dyeing Heritage
+                            </h3>
+                            
+                            <div class="flex flex-wrap items-center gap-2.5 text-[10px] sm:text-xs font-sans text-blue-100/70 pt-2 border-t border-white/10 mt-2">
+                                <span>UX/UI Lead</span>
+                                <span class="w-1 h-1 rounded-full bg-blue-300/40"></span>
+                                <span>RAG AI Agent</span>
+                                <span class="w-1 h-1 rounded-full bg-blue-300/40"></span>
+                                <span>Web+AR App</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2: Neuragut -->
+                <div class="relative w-full max-w-[620px] h-[480px] rounded-[32px] overflow-hidden group cursor-pointer z-10 bg-[#EEF0FF] hover:scale-[1.03] transition-all duration-500 shadow-2xl flex flex-col justify-between" onclick="openProjectDetail('neuragut')">
+                    
+                    <!-- Top Area: Three Screen Mockups sliding on hover (Framer Parallax style) -->
+                    <div class="relative w-full h-[55%] overflow-hidden">
+                        
+                        <!-- Left Screen Mockup -->
+                        <div class="absolute bottom-[-20px] left-[6%] w-[130px] h-[210px] bg-[#121E19] rounded-2xl shadow-xl border border-white/10 overflow-hidden transform -rotate-[12deg] translate-y-4 group-hover:translate-y-[-16px] group-hover:rotate-[-6deg] transition-all duration-500 ease-out z-10">
+                            <div class="w-full h-3 bg-black/40 flex justify-center items-center"><div class="w-8 h-1 bg-white/20 rounded-full"></div></div>
+                            <div class="p-2 space-y-2">
+                                <div class="w-full h-2 bg-emerald-500/30 rounded-full"></div>
+                                <div class="w-full h-32 bg-zinc-800 rounded-lg overflow-hidden flex items-center justify-center">
+                                    <img src="111.jpg" alt="Left UI" class="w-full h-full object-cover hidden" onload="this.classList.remove('hidden')">
+                                    <i class="fa-solid fa-image text-zinc-600 text-lg"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Middle Screen Mockup (Most prominent) -->
+                        <div class="absolute bottom-[-30px] left-[39%] w-[140px] h-[230px] bg-[#EEF0FF] rounded-3xl shadow-2xl border-2 border-white/20 overflow-hidden transform translate-y-6 group-hover:translate-y-[-24px] group-hover:scale-105 transition-all duration-500 ease-out z-20">
+                            <div class="w-full h-3.5 bg-black/20 flex justify-center items-center"><div class="w-10 h-1.5 bg-black/10 rounded-full"></div></div>
+                            <div class="p-2.5 space-y-2">
+                                <div class="w-full h-2.5 bg-emerald-500/20 rounded-full"></div>
+                                <div class="w-full h-36 bg-zinc-200 rounded-xl overflow-hidden flex items-center justify-center">
+                                    <img src="image_084b7e.jpg" alt="Middle UI" class="w-full h-full object-cover hidden" onload="this.classList.remove('hidden')">
+                                    <i class="fa-solid fa-image text-zinc-400 text-xl animate-pulse"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Screen Mockup -->
+                        <div class="absolute bottom-[-20px] right-[6%] w-[130px] h-[210px] bg-[#121E19] rounded-2xl shadow-xl border border-white/10 overflow-hidden transform rotate-[12deg] translate-y-4 group-hover:translate-y-[-16px] group-hover:rotate-[6deg] transition-all duration-500 ease-out z-10">
+                            <div class="w-full h-3 bg-black/40 flex justify-center items-center"><div class="w-8 h-1 bg-white/20 rounded-full"></div></div>
+                            <div class="p-2 space-y-2">
+                                <div class="w-full h-2 bg-emerald-500/30 rounded-full"></div>
+                                <div class="w-full h-32 bg-zinc-800 rounded-lg overflow-hidden flex items-center justify-center">
+                                    <img src="111.jpg" alt="Right UI" class="w-full h-full object-cover hidden" onload="this.classList.remove('hidden')">
+                                    <i class="fa-solid fa-image text-zinc-600 text-lg"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Hover View Badge popout -->
+                        <div class="absolute bottom-4 right-6 px-4 py-2 bg-[#FFFDF6] text-darkBg rounded-full text-xs font-bold font-sans shadow-xl flex items-center gap-1.5 opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 ease-out z-30">
+                            <span>View</span>
+                            <i class="fa-solid fa-arrow-up-right-from-square text-[9px] translate-y-[-1px]"></i>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Wave / Details block -->
+                    <div class="relative w-full h-[45%] bg-[#314188] flex flex-col justify-end p-8 sm:p-10 z-10">
+                        <svg class="absolute bottom-full left-0 w-full h-[50px] text-[#314188] translate-y-[1px]" viewBox="0 0 1000 100" preserveAspectRatio="none" fill="currentColor">
+                            <path d="M0,100 L0,15 C150,15 280,85 450,85 L1000,85 L1000,100 Z" />
+                        </svg>
+
+                        <div class="relative z-20 space-y-2 text-left">
+                            <span class="text-[10px] font-bold text-white/50 uppercase tracking-widest block font-mono">
+                                BIOTECH . HEALTHCARE
+                            </span>
+                            
+                            <h3 class="text-xl sm:text-2xl font-serif font-bold text-white leading-tight pr-12">
+                                Neuragut: Reconstructing Sensory Connections for IBS Patients
+                            </h3>
+                            
+                            <div class="flex flex-wrap items-center gap-2.5 text-[10px] sm:text-xs font-sans text-indigo-100/70 pt-2 border-t border-white/10 mt-2">
+                                <span>Independent PM</span>
+                                <span class="w-1 h-1 rounded-full bg-indigo-300/40"></span>
+                                <span>Sensory Wearable IoT</span>
+                                <span class="w-1 h-1 rounded-full bg-indigo-300/40"></span>
+                                <span>Service System</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- TAB CONTAINER 2: Highly Immersive Dynamic Phone Mockup Showcase Gallery -->
+            <div id="showcase-screens-gallery" class="hidden transition-all duration-500 overflow-hidden relative py-10 w-full">
+                <p class="text-xs font-mono text-zinc-500 tracking-widest uppercase mb-6 text-center select-none">
+                    ← Swipe or Drag with mouse to explore high fidelity screen architecture →
+                </p>
+                <div id="screen-slider" class="flex gap-8 overflow-x-auto pb-12 pt-4 px-4 snap-x snap-mandatory cursor-grab active:cursor-grabbing no-scrollbar w-full">
+                    
+                    <!-- Phone Screen 1: Dashboard Analytics -->
+                    <div class="w-[360px] shrink-0 bg-[#0C0C0E] border border-white/5 rounded-[40px] p-6 snap-start flex flex-col justify-between shadow-2xl relative overflow-hidden select-none">
+                        <div class="flex justify-between items-center text-[10px] text-zinc-500 font-mono mb-4 border-b border-white/5 pb-3">
+                            <span>ANALYTICS HUB // V1</span>
+                            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                        </div>
+                        <div class="space-y-4">
+                            <div class="grid grid-cols-2 gap-3">
+                                <div class="bg-[#121215] p-3 rounded-2xl border border-white/5">
+                                    <span class="text-[9px] text-zinc-500 block uppercase tracking-wider mb-1">Active Subs</span>
+                                    <span class="text-xl font-bold text-white">12,480</span>
+                                    <span class="text-[8px] text-emerald-400 block mt-1">↑ +24% this week</span>
+                                </div>
+                                <div class="bg-[#121215] p-3 rounded-2xl border border-white/5">
+                                    <span class="text-[9px] text-zinc-500 block uppercase tracking-wider mb-1">Live Viewers</span>
+                                    <span class="text-xl font-bold text-white">563k</span>
+                                    <span class="text-[8px] text-emerald-400 block mt-1">↑ +70% last 7d</span>
+                                </div>
+                            </div>
+                            <div class="bg-[#121215] p-4 rounded-2xl border border-white/5 space-y-3">
+                                <span class="text-[10px] text-zinc-400 block uppercase tracking-widest">Revenue Growth</span>
+                                <div class="h-28 w-full flex items-end gap-2 pt-2 border-b border-zinc-800 pb-2 relative">
+                                    <div class="absolute inset-0 flex items-center justify-center opacity-10 pointer-events-none">
+                                        <div class="w-full h-1 bg-gradient-to-r from-indigo-500 to-emerald-500"></div>
+                                    </div>
+                                    <div class="w-full bg-indigo-500/20 hover:bg-indigo-500 h-[30%] rounded-md transition-all duration-300"></div>
+                                    <div class="w-full bg-indigo-500/20 hover:bg-indigo-500 h-[50%] rounded-md transition-all duration-300"></div>
+                                    <div class="w-full bg-indigo-500/20 hover:bg-indigo-500 h-[40%] rounded-md transition-all duration-300"></div>
+                                    <div class="w-full bg-indigo-500/20 hover:bg-indigo-500 h-[75%] rounded-md transition-all duration-300 relative">
+                                        <span class="absolute -top-6 left-1/2 -translate-x-1/2 bg-emerald-400 text-darkBg font-mono text-[8px] font-bold px-1 rounded">$200k</span>
+                                    </div>
+                                    <div class="w-full bg-indigo-500/20 hover:bg-indigo-500 h-[60%] rounded-md transition-all duration-300"></div>
+                                </div>
+                                <div class="flex justify-between text-[8px] text-zinc-600 font-mono">
+                                    <span>MON</span><span>TUE</span><span>WED</span><span>THU</span><span>FRI</span><span>SAT</span>
+                                </div>
+                            </div>
+                            <div class="bg-[#121215] p-3 rounded-2xl border border-white/5 space-y-2">
+                                <div class="flex justify-between text-[10px] text-zinc-400 font-medium">
+                                    <span>Audience by region</span>
+                                    <span class="text-indigo-400">See all</span>
+                                </div>
+                                <div class="space-y-1.5 text-[9px] font-mono">
+                                    <div class="flex justify-between text-zinc-500"><span>China</span><span class="text-zinc-300">66%</span></div>
+                                    <div class="h-1 bg-zinc-800 rounded-full overflow-hidden"><div class="h-full bg-indigo-500 rounded-full" style="width: 66%"></div></div>
+                                    <div class="flex justify-between text-zinc-500"><span>Malaysia</span><span class="text-zinc-300">46%</span></div>
+                                    <div class="h-1 bg-zinc-800 rounded-full overflow-hidden"><div class="h-full bg-indigo-500 rounded-full" style="width: 46%"></div></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Phone Screen 2: Spark Claim Game -->
+                    <div class="w-[360px] shrink-0 bg-[#0C0C0E] border border-white/5 rounded-[40px] p-6 snap-start flex flex-col justify-between shadow-2xl relative overflow-hidden select-none">
+                        <div class="flex justify-between items-center text-[10px] text-zinc-500 font-mono mb-4 border-b border-white/5 pb-3">
+                            <span>COIN INCENTIVE PANEL</span>
+                            <i class="fa-solid fa-coins text-amber-400"></i>
+                        </div>
+                        <div class="flex-1 flex flex-col items-center justify-center space-y-6 text-center my-4">
+                            <div class="w-24 h-24 bg-amber-400/10 border border-amber-400/20 rounded-full flex items-center justify-center relative shadow-inner">
+                                <i class="fa-solid fa-trophy text-4xl text-amber-300 animate-bounce"></i>
+                            </div>
+                            <div class="space-y-2">
+                                <h4 class="font-serif text-2xl font-bold text-white leading-tight">You've earned 100 coins</h4>
+                                <p class="text-xs text-zinc-400 px-4">Your reward has been unlocked. 100 coins have been added to your vault.</p>
+                            </div>
+                            <button id="claim-btn" onclick="triggerClaimCoins()" class="w-full py-4 bg-blue-600 hover:bg-blue-500 text-white font-syne font-black rounded-2xl text-xs uppercase tracking-wider transition-all duration-300 shadow-xl shadow-blue-900/40">
+                                CLAIM COINS
+                            </button>
+                        </div>
+                        <div class="text-center text-[9px] text-zinc-600 font-mono border-t border-white/5 pt-3">
+                            REWARD ID: RWD-2025-110A
+                        </div>
+                    </div>
+
+                    <!-- Phone Screen 3: Milestones & Badges -->
+                    <div class="w-[360px] shrink-0 bg-[#0C0C0E] border border-white/5 rounded-[40px] p-6 snap-start flex flex-col justify-between shadow-2xl relative overflow-hidden select-none">
+                        <div class="flex justify-between items-center text-[10px] text-zinc-500 font-mono mb-4 border-b border-white/5 pb-3">
+                            <span>MILESTONES TRACKER</span>
+                            <span>3 / 5</span>
+                        </div>
+                        <div class="space-y-4 flex-1 overflow-y-auto pr-1 no-scrollbar my-2">
+                            <div class="bg-[#121215] p-3 rounded-2xl border border-emerald-500/20 flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-400 border border-emerald-500/20">
+                                    <i class="fa-solid fa-fingerprint"></i>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <span class="text-[10px] text-zinc-300 font-bold block truncate">Bio-Identity Synced</span>
+                                    <span class="text-[8px] text-zinc-500 block">Autonomic loop synced perfectly</span>
+                                </div>
+                                <span class="text-[9px] text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full font-mono">DONE</span>
+                            </div>
+                            <div class="bg-[#121215] p-3 rounded-2xl border border-blue-500/20 flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-400 border border-blue-500/20">
+                                    <i class="fa-solid fa-shirt"></i>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <span class="text-[10px] text-zinc-300 font-bold block truncate">Tie-Dye Digitized</span>
+                                    <span class="text-[8px] text-zinc-500 block">First 3D textile artifact mapped</span>
+                                </div>
+                                <span class="text-[9px] text-blue-400 bg-blue-500/10 px-2 py-0.5 rounded-full font-mono font-bold">CLAIMED</span>
+                            </div>
+                            <div class="bg-[#121215] p-3 rounded-2xl border-white/5 border flex items-center gap-3 opacity-60">
+                                <div class="w-10 h-10 rounded-xl bg-zinc-800 flex items-center justify-center text-zinc-400 border border-white/5">
+                                    <i class="fa-solid fa-microchip"></i>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <span class="text-[10px] text-zinc-400 font-bold block truncate">6DoF Unity Alignment</span>
+                                    <span class="text-[8px] text-zinc-600 block">Extracting spatial coordinates</span>
+                                </div>
+                                <span class="text-[9px] text-zinc-500 font-mono">LOCKED</span>
+                            </div>
+                        </div>
+                        <p class="text-[8px] text-zinc-500 text-center uppercase tracking-widest mt-2 border-t border-white/5 pt-3">
+                            Unlock new features with milestones
+                        </p>
+                    </div>
+
+                    <!-- Phone Screen 4: Interpersonal Social Bio Card -->
+                    <div class="w-[360px] shrink-0 bg-[#0C0C0E] border border-white/5 rounded-[40px] p-6 snap-start flex flex-col justify-between shadow-2xl relative overflow-hidden select-none">
+                        <div class="flex justify-between items-center text-[10px] text-zinc-500 font-mono mb-4 border-b border-white/5 pb-3">
+                            <span>SOCIAL BIO MODULE // PRO</span>
+                            <span class="text-[8px] px-2 py-0.5 bg-emerald-500/10 text-emerald-400 rounded border border-emerald-500/20 uppercase">VERIFIED</span>
+                        </div>
+                        <div class="space-y-4 flex-1 flex flex-col justify-between">
+                            <div class="relative w-full h-48 rounded-2xl overflow-hidden bg-cover bg-center border border-white/5" style="background-image: url('image_084b7e.jpg');">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black via-black/10 to-transparent"></div>
+                                <div class="absolute bottom-4 left-4">
+                                    <h5 class="text-sm font-bold text-white">Olivia Nilsa, 29</h5>
+                                    <p class="text-[9px] text-zinc-300">Wales, United Kingdom . 3 km away</p>
+                                </div>
+                            </div>
+                            
+                            <!-- Interactive Audio Waves Player component -->
+                            <div class="bg-[#121215] p-3 rounded-2xl border border-white/5 space-y-2">
+                                <div class="flex items-center gap-3">
+                                    <button id="wave-play-btn" onclick="toggleAudioVisualizer()" class="w-8 h-8 rounded-full bg-indigoDye hover:bg-indigo-600 text-white flex items-center justify-center transition-colors">
+                                        <i id="wave-play-icon" class="fa-solid fa-play text-xs pl-0.5"></i>
+                                    </button>
+                                    <div class="flex-1 flex items-center justify-between gap-1 h-6 px-1" id="audio-wave-bars">
+                                        <div class="w-1 bg-zinc-700 rounded h-3 duration-150 bar-wave"></div>
+                                        <div class="w-1 bg-zinc-700 rounded h-5 duration-150 bar-wave"></div>
+                                        <div class="w-1 bg-zinc-700 rounded h-2 duration-150 bar-wave"></div>
+                                        <div class="w-1 bg-zinc-700 rounded h-6 duration-150 bar-wave"></div>
+                                        <div class="w-1 bg-zinc-700 rounded h-4 duration-150 bar-wave"></div>
+                                        <div class="w-1 bg-zinc-700 rounded h-2 duration-150 bar-wave"></div>
+                                        <div class="w-1 bg-zinc-700 rounded h-5 duration-150 bar-wave"></div>
+                                        <div class="w-1 bg-zinc-700 rounded h-3 duration-150 bar-wave"></div>
+                                    </div>
+                                    <span class="text-[9px] text-zinc-500 font-mono">0:23</span>
+                                </div>
+                            </div>
+
+                            <div class="flex justify-around items-center pt-2">
+                                <button class="w-10 h-10 rounded-full border border-zinc-800 bg-zinc-900/40 hover:bg-zinc-800 text-zinc-400 flex items-center justify-center transition-colors"><i class="fa-solid fa-xmark text-sm"></i></button>
+                                <button class="w-12 h-12 rounded-full bg-rose-500/10 border border-rose-500/20 hover:bg-rose-500/20 text-rose-400 flex items-center justify-center transition-all scale-105"><i class="fa-solid fa-heart text-base"></i></button>
+                                <button class="w-10 h-10 rounded-full border border-zinc-800 bg-zinc-900/40 hover:bg-zinc-800 text-zinc-400 flex items-center justify-center transition-colors"><i class="fa-solid fa-star text-sm"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Phone Screen 5: Interconnected Tech Hub Circle -->
+                    <div class="w-[360px] shrink-0 bg-[#0C0C0E] border border-white/5 rounded-[40px] p-6 snap-start flex flex-col justify-between shadow-2xl relative overflow-hidden select-none">
+                        <div class="flex justify-between items-center text-[10px] text-zinc-500 font-mono mb-4 border-b border-white/5 pb-3">
+                            <span>SENSORY FEEDBACK MAP</span>
+                            <span class="w-1.5 h-1.5 rounded-full bg-blue-500 animate-ping"></span>
+                        </div>
+                        <div class="flex-1 flex flex-col items-center justify-center relative py-4">
+                            <!-- Inner interconnected glowing node graphic -->
+                            <div class="w-40 h-40 border-2 border-dashed border-indigo-500/20 rounded-full flex items-center justify-center relative animate-spin-slow">
+                                <div class="absolute -top-3 w-6 h-6 bg-[#0C0C0E] border border-purple-500/40 text-purple-400 rounded-full flex items-center justify-center text-[8px] shadow-lg"><i class="fa-solid fa-brain"></i></div>
+                                <div class="absolute -bottom-3 w-6 h-6 bg-[#0C0C0E] border border-emerald-500/40 text-emerald-400 rounded-full flex items-center justify-center text-[8px] shadow-lg"><i class="fa-solid fa-wave-square"></i></div>
+                                <div class="absolute -left-3 w-6 h-6 bg-[#0C0C0E] border border-amber-500/40 text-amber-400 rounded-full flex items-center justify-center text-[8px] shadow-lg"><i class="fa-solid fa-bolt"></i></div>
+                                <div class="absolute -right-3 w-6 h-6 bg-[#0C0C0E] border border-blue-500/40 text-blue-400 rounded-full flex items-center justify-center text-[8px] shadow-lg"><i class="fa-solid fa-heart"></i></div>
+                            </div>
+                            <!-- Static Center node -->
+                            <div class="absolute w-16 h-16 bg-[#FFFDF6] text-darkBg rounded-full flex items-center justify-center font-syne font-black shadow-2xl flex-col">
+                                <span class="text-xs uppercase tracking-tighter">Sumi</span>
+                                <span class="text-[6px] font-mono opacity-60">HUB</span>
+                            </div>
+                        </div>
+                        <div class="text-center space-y-1.5 pt-3 border-t border-white/5">
+                            <span class="text-[9px] text-zinc-400 block font-mono">BIO-LINK DUPLEX CALIBRATION</span>
+                            <div class="h-1 bg-zinc-800 rounded-full overflow-hidden"><div class="h-full bg-gradient-to-r from-purple-500 to-emerald-400 w-full animate-pulse"></div></div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Modal: Infinite Responsive Project Details View with Full Screen Sizing -->
+    <div id="project-detail-modal" class="fixed inset-0 z-[100] bg-darkBg overflow-y-auto hidden no-scrollbar">
+        <!-- Sticky Header Controls -->
+        <div class="sticky top-0 z-[130] bg-[#0A0A0A]/95 backdrop-blur-md px-6 md:px-12 py-4 flex justify-between items-center border-b border-b-white/5">
+            <span class="font-syne text-xs text-zinc-400 tracking-[0.25em] uppercase font-bold">PROJECT CASE STUDY // SYSTEM DESIGN MATRIX</span>
+            <button onclick="closeProjectDetail()" class="text-zinc-400 hover:text-white flex items-center gap-1.5 text-xs bg-white/5 px-5 py-2.5 rounded-full border border-white/10 transition-all hover:bg-white/10">
+                <i class="fa-solid fa-arrow-left"></i> Close & Back
+            </button>
+        </div>
+        
+        <!-- Modal Dynamic Content Container - Widened to max width of 1500px for full-screen immersive reading -->
+        <div id="modal-dynamic-content" class="w-full max-w-[1500px] mx-auto">
+            <!-- Dynamic header block and professional sections rendered via JavaScript -->
+        </div>
+    </div>
+
+    <!-- Act III: AI In My Work Sandbox Section -->
+    <section id="ai-work" class="relative py-24 px-6 md:px-12 lg:px-24 bg-[#0A0A0A] border-t border-white/5 z-10 overflow-hidden w-full">
+        <div class="max-w-[1600px] mx-auto space-y-8 relative w-full">
+            <div class="absolute -top-24 left-1/4 w-80 h-80 bg-indigo-900/10 rounded-full blur-[100px] pointer-events-none"></div>
+
+            <div class="space-y-4 text-center max-w-3xl mx-auto">
+                <h2 class="font-serif text-3xl sm:text-4xl md:text-5xl text-white font-normal tracking-wide">
+                    Where <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-amber-200 font-sans font-bold">AI Fits</span> in My Work...
+                </h2>
+                <p class="font-sans text-xs sm:text-sm text-zinc-400 leading-relaxed tracking-wide">
+                    AI 是我探索与落地的高效催化剂。我专注于系统设计、架构梳理与极致交互，借力前沿工具将复杂痛点转化为优美而有温度的产品体验。
+                </p>
+            </div>
+
+            <div class="relative w-full rounded-3xl bg-[#0C0C0E] border border-white/5 p-1 overflow-hidden shadow-2xl">
+                <div class="absolute top-4 left-6 z-20 flex items-center gap-2 pointer-events-none">
+                    <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+                    <span class="text-[9px] font-mono tracking-widest text-zinc-500 uppercase">Interactive Physics Canvas</span>
+                </div>
+                <canvas id="ai-physics-canvas" class="w-full h-[280px] sm:h-[350px] md:h-[420px] bg-gradient-to-b from-[#0F0F12] to-[#0A0A0C] block rounded-2xl cursor-pointer"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Reviews -->
+    <section id="reviews" class="relative py-24 px-6 md:px-12 lg:px-24 bg-[#0A0A0A] border-t border-white/5 z-10 overflow-hidden w-full">
+        <div class="max-w-[1500px] mx-auto space-y-12 text-center relative">
+            <div class="space-y-4">
+                <span class="text-xs uppercase tracking-[0.4em] font-semibold text-zinc-500 block animate-pulse">
+                    [ ACT II-C: COLLABORATOR ECHOES ]
+                </span>
+                <h2 class="font-serif text-4xl sm:text-5xl lg:text-6xl text-[#FFFDF6] font-normal tracking-wide">
+                    Hear What People Say <br class="sm:hidden">About Me
+                </h2>
+            </div>
+
+            <div class="relative bg-[#FFFDF6] text-[#0D0D11] rounded-[32px] p-8 md:p-14 shadow-2xl max-w-4xl mx-auto border border-white/10 text-left transition-all duration-500 transform" id="testimonial-card">
+                <div class="space-y-6">
+                    <p class="font-sans text-base sm:text-lg md:text-xl text-zinc-800 leading-relaxed font-light" id="testimonial-quote">
+                        "I had the pleasure of working closely with Shengmin on several projects..."
+                    </p>
+                    <div class="border-t border-zinc-200/60 pt-6">
+                        <h4 class="font-syne text-sm sm:text-base font-bold text-zinc-900 tracking-wider uppercase" id="testimonial-author">
+                            Tsherundede Ejueyitchie
+                        </h4>
+                        <p class="font-mono text-xs text-zinc-500 tracking-wide mt-1 uppercase" id="testimonial-role">
+                            CEO, Kellon
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-center items-center gap-6 pt-4" id="testimonial-avatars">
+                <button onclick="switchTestimonial(0)" class="relative focus:outline-none transition-all duration-300 transform hover:scale-115 avatar-btn active-avatar" data-index="0">
+                    <div class="w-16 h-16 rounded-full overflow-hidden border-2 border-transparent p-1 transition-all duration-300 ring-container">
+                        <div class="w-full h-full rounded-full bg-gradient-to-tr from-amber-600 to-indigo-950 flex items-center justify-center text-zinc-100 font-syne font-black text-lg">TE</div>
+                    </div>
+                </button>
+                <button onclick="switchTestimonial(1)" class="relative focus:outline-none transition-all duration-300 transform hover:scale-115 avatar-btn" data-index="1">
+                    <div class="w-16 h-16 rounded-full overflow-hidden border-2 border-transparent p-1 transition-all duration-300 ring-container">
+                        <div class="w-full h-full rounded-full bg-gradient-to-tr from-sky-800 to-slate-900 flex items-center justify-center text-zinc-100 font-syne font-black text-lg">ML</div>
+                    </div>
+                </button>
+                <button onclick="switchTestimonial(2)" class="relative focus:outline-none transition-all duration-300 transform hover:scale-115 avatar-btn" data-index="2">
+                    <div class="w-16 h-16 rounded-full overflow-hidden border-2 border-transparent p-1 transition-all duration-300 ring-container">
+                        <div class="w-full h-full rounded-full bg-gradient-to-tr from-emerald-700 to-zinc-950 flex items-center justify-center text-zinc-100 font-syne font-black text-lg">PZ</div>
+                    </div>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Biography & Specs -->
+    <section id="about" class="relative py-24 px-6 md:px-12 lg:px-24 border-t border-white/5 z-10 bg-gradient-to-b from-[#0f0f13] to-[#0a0a0a] w-full">
+        <div class="max-w-[1600px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center w-full">
+            
+            <div class="lg:col-span-5 flex justify-center">
+                <div class="relative w-72 h-96 sm:w-80 sm:h-[400px] md:w-96 md:h-[450px] rounded-3xl overflow-hidden glass-panel p-2 shadow-2xl group">
+                    <div class="absolute inset-0 bg-gradient-to-t from-darkBg via-transparent to-transparent z-10"></div>
+                    <div class="w-full h-full bg-zinc-900 rounded-2xl overflow-hidden relative flex items-center justify-center">
+                        <div class="absolute inset-0 bg-zinc-950 opacity-40"></div>
+                        <svg width="100%" height="100%" viewBox="0 0 300 400" fill="none" xmlns="http://www.w3.org/2000/svg" class="opacity-80 group-hover:scale-105 transition-transform duration-1000">
+                            <rect width="300" height="400" fill="#0E121F"/>
+                            <circle cx="150" cy="180" r="100" fill="#0D2F6B" fill-opacity="0.4" filter="blur(20px)"/>
+                            <path d="M150 140 C190 140, 220 180, 220 230 C220 280, 150 310, 150 310 C150 310, 80 280, 80 230 C80 180, 110 140, 150 140 Z" fill="#18181B" stroke="#22D3EE" stroke-width="0.5" stroke-opacity="0.3"/>
+                            <path d="M150 120 C180 120, 200 150, 200 190" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round"/>
+                            <path d="M100 190 C100 150, 120 120, 150 120" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round"/>
+                            <line x1="150" y1="80" x2="150" y2="340" stroke="#22D3EE" stroke-width="0.5" stroke-opacity="0.2"/>
+                            <line x1="50" y1="210" x2="250" y2="210" stroke="#22D3EE" stroke-width="0.5" stroke-opacity="0.2"/>
+                            <circle cx="130" cy="190" r="12" stroke="#2EE59D" stroke-width="1.5"/>
+                            <circle cx="170" cy="190" r="12" stroke="#2EE59D" stroke-width="1.5"/>
+                            <line x1="142" y1="190" x2="158" y2="190" stroke="#2EE59D" stroke-width="1.5"/>
+                            <path d="M110 230 Q150 250 190 230" stroke="#A855F7" stroke-width="1.5" stroke-opacity="0.8" stroke-linecap="round"/>
+                        </svg>
+                        
+                        <div class="absolute bottom-6 left-6 right-6 z-20 flex justify-between items-center bg-darkBg/80 backdrop-blur px-4 py-3 rounded-xl border border-white/5">
+                            <div>
+                                <h5 class="text-xs font-bold text-white tracking-wider">SUMI (声敏)</h5>
+                                <p class="text-[10px] text-zinc-400">Product / UX Designer</p>
+                            </div>
+                            <span class="px-2 py-0.5 bg-indigoDye text-white text-[9px] tracking-widest uppercase font-mono rounded">GPA 3.7</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Info & Specs -->
+            <div class="lg:col-span-7 space-y-8">
+                <div class="space-y-3">
+                    <span class="text-xs uppercase tracking-[0.4em] font-semibold text-zinc-500 block">
+                        [ ACT V: THE COMPOSITE PROFILE ]
+                    </span>
+                    <h2 class="font-syne text-3xl sm:text-5xl font-black text-white uppercase tracking-tight">
+                        COGNITIVE SPECIFICATIONS
+                    </h2>
+                </div>
+
+                <p class="font-serif text-base text-zinc-300 line-clamp-3 italic">
+                    “生于2004年，致力于新媒体技术的探索。以全栈产品理念，融合前沿程序算法、大数据分析与高端交互美学，打破单一视角的技术与设计偏见。”
+                </p>
+
+                <div class="p-6 rounded-2xl glass-panel space-y-3">
+                    <div class="flex justify-between items-start flex-wrap gap-2">
+                        <h4 class="text-sm font-semibold tracking-wider text-white">齐鲁工业大学 · 新媒体技术专业</h4>
+                        <span class="text-xs font-mono text-zinc-400">2023 - 至今</span>
+                    </div>
+                    <p class="text-xs text-zinc-400 leading-relaxed">
+                        核心课程涵盖程序设计、大数据分析与挖掘、SQL数据库、移动软件开发、交互设计 research 及色彩学，核心平均分达到90+分。
+                    </p>
+                </div>
+
+                <div class="space-y-4">
+                    <h4 class="text-xs font-mono uppercase tracking-[0.3em] text-zinc-400 font-semibold">ENGINEERING & DESIGN MATRIX</h4>
+                    
+                    <div class="space-y-3 font-mono text-xs">
+                        <div class="space-y-1">
+                            <div class="flex justify-between text-zinc-400">
+                                <span>Figma (High-Fidelity UI & Service Map)</span>
+                                <span>95%</span>
+                            </div>
+                            <div class="h-1.5 w-full bg-zinc-800 rounded-full overflow-hidden">
+                                <div class="h-full bg-gradient-to-r from-indigo-500 to-indigoDye rounded-full" style="width: 95%"></div>
+                            </div>
+                        </div>
+
+                        <div class="space-y-1">
+                            <div class="flex justify-between text-zinc-400">
+                                <span>Arduino & Processing (Sensory Feedback)</span>
+                                <span>90%</span>
+                            </div>
+                            <div class="h-1.5 w-full bg-zinc-800 rounded-full overflow-hidden">
+                                <div class="h-full bg-gradient-to-r from-emerald-500 to-emerald-700 rounded-full" style="width: 90%"></div>
+                            </div>
+                        </div>
+
+                        <div class="space-y-1">
+                            <div class="flex justify-between text-zinc-400">
+                                <span>MySQL & Database logic</span>
+                                <span>80%</span>
+                            </div>
+                            <div class="h-1.5 w-full bg-zinc-800 rounded-full overflow-hidden">
+                                <div class="h-full bg-gradient-to-r from-zinc-500 to-zinc-400 rounded-full" style="width: 80%"></div>
+                            </div>
+                        </div>
+
+                        <div class="space-y-1">
+                            <div class="flex justify-between text-zinc-400">
+                                <span>Blender (3D Modeling & Rendering)</span>
+                                <span>70%</span>
+                            </div>
+                            <div class="h-1.5 w-full bg-zinc-800 rounded-full overflow-hidden">
+                                <div class="h-full bg-gradient-to-r from-purple-500 to-purple-700 rounded-full" style="width: 70%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap items-center gap-6 pt-4">
+                    <button onclick="copyEmail()" class="px-6 py-3.5 bg-[#FFFDF6] hover:bg-emerald-400 text-darkBg text-xs font-bold tracking-widest uppercase rounded-full transition-all duration-300 flex items-center gap-2">
+                        <i class="fa-solid fa-envelope"></i>
+                        Copy Email
+                    </button>
+                    <a href="tel:17763473292" class="px-6 py-3.5 bg-white/5 hover:bg-white/10 text-white text-xs font-bold tracking-widest uppercase rounded-full border border-white/10 transition-all duration-300 flex items-center gap-2">
+                        <i class="fa-solid fa-phone"></i>
+                        Call Sumi
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Playful Friendly Footer -->
+    <section class="relative py-20 px-6 md:px-12 lg:px-24 bg-[#FFFDF6] text-darkBg rounded-t-[32px] z-10 grid grid-cols-1 md:grid-cols-2 gap-12 items-center w-full">
+        <div class="space-y-6 text-left">
+            <div class="w-48 h-48 select-none mx-0 opacity-90">
+                <svg viewBox="0 0 150 150" class="w-full h-full text-darkBg fill-none stroke-current" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="40" y="90" width="70" height="30" rx="15" fill="#0A0A0A" />
+                    <text x="75" y="108" font-family="sans-serif" font-weight="bold" font-size="9" fill="#FFFDF6" text-anchor="middle">LET'S GO!</text>
+                    <circle cx="75" cy="50" r="14" />
+                    <path d="M75,64 L75,85" />
+                    <path d="M55,68 L75,60 L95,68" />
+                    <path d="M60,95 L75,85 L90,95" />
+                    <path d="M25,35 L30,30 L35,35 M30,30 L30,40" stroke-width="1.5" />
+                    <path d="M115,35 L120,30 L125,35 M120,30 L120,40" stroke-width="1.5" />
+                    <circle cx="28" cy="70" r="2" fill="currentColor"/>
+                    <circle cx="122" cy="70" r="2" fill="currentColor"/>
+                </svg>
+            </div>
+            
+            <h3 class="font-serif text-3xl sm:text-4xl font-black text-darkBg leading-tight">
+                Let's work on something real
+            </h3>
+            <p class="font-sans text-sm text-zinc-600 leading-relaxed max-w-md">
+                If you have a product challenge, an open role, or just a problem you have been sitting on too long, my inbox is always open.
+            </p>
+        </div>
+
+        <div class="space-y-8 text-left md:pl-12">
+            <div class="space-y-3">
+                <h4 class="text-xs uppercase font-mono tracking-widest text-zinc-500 font-bold">Contact Me:</h4>
+                <button onclick="copyEmail()" class="px-5 py-2.5 bg-darkBg hover:bg-zinc-800 text-white rounded-full text-xs font-bold tracking-wider uppercase transition-colors">
+                    Copy Email
+                </button>
+            </div>
+
+            <div class="space-y-4">
+                <h4 class="text-xs uppercase font-mono tracking-widest text-zinc-500 font-bold">Find Me On:</h4>
+                <div class="grid grid-cols-2 gap-4 font-sans text-sm font-semibold text-darkBg">
+                    <a href="mailto:17763473292@163.com" class="hover:underline flex items-center gap-1">Email <i class="fa-solid fa-arrow-up-right-from-square text-[10px] opacity-70"></i></a>
+                    <a href="tel:17763473292" class="hover:underline flex items-center gap-1">Phone <i class="fa-solid fa-arrow-up-right-from-square text-[10px] opacity-70"></i></a>
+                    <a href="#" class="hover:underline flex items-center gap-1">Figma Spec <i class="fa-solid fa-arrow-up-right-from-square text-[10px] opacity-70"></i></a>
+                    <a href="#" class="hover:underline flex items-center gap-1">Blender Lab <i class="fa-solid fa-arrow-up-right-from-square text-[10px] opacity-70"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Deep Dark Bottom Signature Overlay Canvas with Physics Smiley Dropping (Upgraded) -->
+    <footer class="relative min-h-[460px] bg-black z-10 overflow-hidden flex flex-col justify-end py-10">
+        <!-- Interactive Smiley Canvas Backdrop -->
+        <div class="absolute inset-0 z-0">
+            <canvas id="footer-physics-canvas" class="w-full h-full block cursor-pointer"></canvas>
+        </div>
+
+        <div class="relative z-10 text-center pointer-events-none mt-auto">
+            <div class="flex justify-center space-x-6 text-xs text-zinc-500 font-mono select-none">
+                <span class="pointer-events-auto cursor-pointer hover:text-white">Home</span>
+                <span>•</span>
+                <span class="pointer-events-auto cursor-pointer hover:text-white">Playground</span>
+                <span>•</span>
+                <span class="pointer-events-auto cursor-pointer hover:text-white">Framer Template</span>
+            </div>
+            <p class="text-[9px] text-zinc-700 tracking-wider font-mono uppercase mt-4 select-none">
+                DESIGNED WITH CINEMATIC RESONANCE • UPDATED IN 2026 BY SUMI
+            </p>
+        </div>
+    </footer>
+
+    <!-- Custom Toast Notification -->
+    <div id="toast" class="fixed bottom-8 right-8 z-[200] bg-zinc-900 border border-white/10 px-5 py-3 rounded-xl flex items-center gap-3 shadow-2xl opacity-0 translate-y-10 pointer-events-none transition-all duration-300">
+        <div class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></div>
+        <span id="toast-text" class="text-xs font-mono font-medium text-zinc-200"></span>
+    </div>
+
+    <!-- JavaScript Sections -->
+    <script>
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        
+        function playCardFlickSFX() {
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(120, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(800, audioCtx.currentTime + 0.08);
+            gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.12);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.12);
+        }
+
+        // Bass Pop Sound Effect when clicking the footer S U M I
+        function playBlastSFX() {
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            // Low boom
+            const osc1 = audioCtx.createOscillator();
+            const gain1 = audioCtx.createGain();
+            osc1.type = 'sine';
+            osc1.frequency.setValueAtTime(150, audioCtx.currentTime);
+            osc1.frequency.exponentialRampToValueAtTime(45, audioCtx.currentTime + 0.45);
+            gain1.gain.setValueAtTime(0.18, audioCtx.currentTime);
+            gain1.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.5);
+            osc1.connect(gain1);
+            gain1.connect(audioCtx.destination);
+            osc1.start();
+            osc1.stop(audioCtx.currentTime + 0.5);
+
+            // Metallic high click
+            const osc2 = audioCtx.createOscillator();
+            const gain2 = audioCtx.createGain();
+            osc2.type = 'triangle';
+            osc2.frequency.setValueAtTime(800, audioCtx.currentTime);
+            osc2.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.05);
+            gain2.gain.setValueAtTime(0.03, audioCtx.currentTime);
+            gain2.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.08);
+            osc2.connect(gain2);
+            gain2.connect(audioCtx.destination);
+            osc2.start();
+            osc2.stop(audioCtx.currentTime + 0.08);
+        }
+
+        function playEntryChime() {
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(440, audioCtx.currentTime); // A4
+            osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.35); // A5
+            gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.45);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.45);
+        }
+    </script>
+
+    <script>
+        // Professional Design-Driven Project Data Matrix - Remixed into professional timeline format
+        const projectData = {
+            sheechoes: {
+                title: 'Sheechoes',
+                projectNum: '01',
+                subTitle: 'New Digital Ecosystem for Tie-dyeing Heritage',
+                techStack: 'UX/UI Framework | RAG AI Agent | Web3 Heritage Ledger',
+                bannerBg: 'bg-[#1E2540] bg-gradient-to-br from-[#0B0D18] via-[#1E2540] to-[#2D6CE5]',
+                mockupTheme: 'bg-[#EEF2FF]',
+                desc: '“SHEECHOES” 是一套专为非物质文化遗产（周城白族扎染）数字化保护与价值重塑设计的创新服务生态体系。它深度融合了 RAG 架构的 AI Agent 技术与 Unity 6DoF 空间感应。',
+                meta: {
+                    role: 'Lead UX / Systems Lead',
+                    team: 'Engineering, Cultural R&D, UI/UX',
+                    platform: 'Responsive Web + WebXR Mobile App',
+                    date: '2025.10 - 2026.01'
+                },
+                sections: [
+                    {
+                        phase: 'Phase 1: Project Brief & Inspiration',
+                        heading: '发现价值裂痕：从大理作坊到上海橱窗',
+                        content: '在云南大理的实地调研中，我发现了一个令人心碎的“价值断层”：白族阿婆手中传承千年的冰裂纹扎染，在当地收入微薄，年轻人不愿意接班；而相同的工艺在上海的奢侈品橱窗里却被奉为估价上万的珍宝。为什么真正的创造者得不到应有的回报？SheEchoes 旨在通过技术赋能与数字故事构建，打破这一不对称，重建数字化信任生态。',
+                        imgSrc: 'image_084b7c.jpg', 
+                        imgLabel: '作品集.pdf - Page 1 (Project Cover & Motivation Background)',
+                        pageRef: 'Page 1'
+                    },
+                    {
+                        phase: 'Phase 2: Research & Market Discovery',
+                        heading: '历史脉络溯源与商业价值流变',
+                        content: '本节细致梳理扎染（绞缬）从秦汉起源、唐宋兴盛再到2006年列入国家级非遗的千年发展简史。同时，通过分析现代工艺的五大核心步骤（画样、扎缝、浸染、拆线、晾晒），明确数字化采集的关键转折点，以此确定通过“扎缝手工艺痕迹数字化识别”进行确权与溢价评估的科学价值框架。',
+                        imgSrc: 'image_page2.jpg', 
+                        imgLabel: '作品集.pdf - Page 2 (Millennial History Timeline & 5 Handcrafted Craft Steps)',
+                        pageRef: 'Page 2'
+                    },
+                    {
+                        phase: 'Phase 3: Macro to Micro Research Insights',
+                        heading: 'PEST 框架推演与多维市场交叉细分',
+                        content: '依托扎实的用户、专家、非遗传承人及消费者的定性访谈（Interview），并辅以 PEST 宏观行业研究，推导出一份极具说服力的“非遗+商业”跨界增量图谱。详细对比了扎结、缝绞、折叠等六种经典手艺在现代服饰、家居、艺术收藏等三大主流方向的市场渗透率与年复合增长率，精准锁定数字化破局赛道。',
+                        imgSrc: 'image_page3.jpg', 
+                        imgLabel: '作品集.pdf - Page 3 (PEST matrix, Stakeholder Interviews & Market Infographics)',
+                        pageRef: 'Page 3'
+                    },
+                    {
+                        phase: 'Phase 4: Dynamic Persona & Journey Blueprint',
+                        heading: '双向用户共情地图、旅程模型与系统心智脑图',
+                        content: '为了在手工匠人、年轻文化先锋与现代价值消费者之间搭建无缝沟通的桥梁，我绘制了极其详尽的“大理大集 - 手机交互 - 快递物流 - 平台确权”全场景用户旅程图（User Journey Map）。通过共情地图（Empathy Map）深挖痛点，利用系统脑图锁定“How Might We”核心命题，将复杂的文化叙事转化为系统化的功能矩阵。',
+                        imgSrc: 'image_page4.jpg', 
+                        imgLabel: '作品集.pdf - Page 4 (Visual Journey Map Flows, Mindmaps & Core HMW Statements)',
+                        pageRef: 'Page 4'
+                    },
+                    {
+                        phase: 'Phase 5: Information Architecture & Low-Hi Prototyping',
+                        heading: '全景信息架构规划与双端高保真交互走线',
+                        content: '规划完整的平台底层信息架构（Information Architecture），涵盖天气驱动推荐系统的 Homepage、具有多维交互的 Feature Page、集成拍卖玩法的 Product Page，以及透明可追溯的 Public Welfare Page（她基金确权系统）。本章重点对比展示 Low-Fi 快速线框图与高保真原型流（Low-fi & High-fi Flows），保障极致的易用性与视觉美感。',
+                        imgSrc: 'image_page5.jpg', 
+                        imgLabel: '作品集.pdf - Page 5 (High-fidelity App UI Wireframes & Comprehensive IA Mapping)',
+                        pageRef: 'Page 5'
+                    },
+                    {
+                        phase: 'Phase 6: Advanced Technical Realization',
+                        heading: '智能算法与空间交互：RAG 智能体、Unity 6DoF 与空间 AR 联调',
+                        content: '作为一名兼具开发能力的复合型设计师，本节重点阐述了底层技术链路的实现逻辑：1. RAG AI Agent 知识知识检索架构，用于白族民俗叙事生成，并彻底消除大语言模型的幻觉问题；2. 基于 Unity AR 的 6DoF 空间精准图像特征点识别与纹理物理对齐。这里详尽解构了 Vuforia 空间对齐参数以及多模态工作流，提供真正落地的硬核交互技术方案。',
+                        imgSrc: 'image_page6.jpg', 
+                        imgLabel: '作品集.pdf - Page 6 (AI RAG Architecture, Unity 3D AR Flows & Technical Implementation)',
+                        pageRef: 'Page 6'
+                    }
+                ]
+            },
+            neuragut: {
+                title: 'Neuragut',
+                projectNum: '02',
+                subTitle: 'How to help IBS patients reconstruct sensory connection?',
+                techStack: 'Healthcare Design | Wearable Technology | Service System',
+                bannerBg: 'bg-[#121E19] bg-gradient-to-br from-[#0A0F0D] via-[#121E19] to-[#053E2D]',
+                mockupTheme: 'bg-[#EEF0FF]',
+                desc: '“NEURAGUT” 是一套针对肠易激综合征（IBS）患者设计的生理-心理协同干预系统。它结合了创新的多模态可穿戴硬件与数字化平台，旨在跨越单纯的药物治疗界限。',
+                meta: {
+                    role: 'Independent PM',
+                    team: 'Hardware, UI/UX, Medical R&D',
+                    platform: 'IoT Wearable, Native App',
+                    date: '2026.01 - 2026.04'
+                },
+                sections: [
+                    {
+                        phase: 'Phase 1: Project Brief & Clinical Challenge',
+                        heading: '脑肠轴失调与内脏敏化：传统医疗碎片化的局限性',
+                        content: '在现代社会高强度的学习与工作环境中，肠易激综合征（IBS）已成为一堵隐形的墙，阻断了患者的正常饮食与社交自信。这绝非单纯的身体不适，而是由于“脑肠轴（Brain-Gut Axis）”的双向信息传递失调，导致大脑皮层接收到了过载的内脏敏感信号，形成了生理紧张到心理焦虑的病理恶性循环。我们能否通过交互设备跨越药物疗法的碎片化极限？',
+                        imgSrc: 'image_084b7e.jpg', 
+                        imgLabel: '作品集.pdf - Page 7 (Wearables & Concept Framework)',
+                        pageRef: 'Page 7'
+                    },
+                    {
+                        phase: 'Phase 2: Research & Insights',
+                        heading: '医学循证推演：Rome IV 临床病理特征与亚型映射',
+                        content: '深入钻研 ROME IV 临床诊断指南，系统拆解 IBS 的四个核心机制：肠神经电冲动不调、异常分泌敏化、中枢过载与心理共病（焦虑症）。在多维痛点分析中，确定腹泻型 (IBS-D)、便秘型 (IBS-C)、混合型 (IBS-M) 与未定型 (IBS-U) 的生理信号特征差异，绘制出症状敏度与皮层电极激活关联曲线，找到通过物理干预和生理反馈进行阻断的科学靶点。',
+                        imgSrc: 'image_page8.jpg', 
+                        imgLabel: '作品集.pdf - Page 8 (Clinical Subtypes, Medical Research & Loss Matrix)',
+                        pageRef: 'Page 8'
+                    },
+                    {
+                        phase: 'Phase 3: Strategy & Alignment',
+                        heading: '破局思维建立：三维用户画像与生理反馈闭环故事板',
+                        content: '深度分析现有压力管理与舒缓装置（The Medication Failure Zone）。构建高维用户共情地图与生理反馈闭环故事板。规划前台生理调理、中台自主解压和后台临床汇报的服务通路（Function Map），模拟“通勤途中突发腹痛 ➔ 可穿戴热能介入与呼吸协同 ➔ 危机平复”全过程，论证生理协同干预的可行性。',
+                        imgSrc: 'image_page9.jpg', 
+                        imgLabel: '作品集.pdf - Page 9 & 10 (Therapy Limitations, Empathy Map & Storyboard Flows)',
+                        pageRef: 'Page 9 & 10'
+                    },
+                    {
+                        phase: 'Phase 4: Architecture & UX Flow',
+                        heading: '全局生态系统图景：可穿戴智能硬核与多利益相关者模型',
+                        content: '构建包含前、后台服务节点的信息架构（Information Architecture）。绘制包含典型高压学术青年、医生、家属在内的系统闭环图。规范脑部头带电信号回流与腰部电脉冲/热敷的闭环控制。',
+                        imgSrc: 'image_page10.jpg', 
+                        imgLabel: '作品集.pdf - Page 10 (Dynamic Persona, System Mapping & Function Matrix)',
+                        pageRef: 'Page 10'
+                    },
+                    {
+                        phase: 'Phase 5: Technical Realization & Craft',
+                        heading: '工程底盘推导：专利技术转化与硬件控制算法细节',
+                        content: '产品不仅需要美好的界面，更需要坚实的硬科技支撑。拆解包括柔性干式脑电电极、三维高敏压力感应衬垫在内的六大专利技术在硬件上的协同。同时展示基于 Arduino / Processing 的通信处理系统控制代码，处理包含脑电巴特沃斯高频滤波、HRV 变异度实时计算及微发热气阀温控决策的程序细节。同时提供头带/腰带高精度工业设计爆炸图。',
+                        imgSrc: 'image_page11.jpg', 
+                        imgLabel: '作品集.pdf - Page 11 & 12 (Engineering Patents, Arduino Coding & Structural Explosions)',
+                        pageRef: 'Page 11 & 12'
+                    },
+                    {
+                        phase: 'Phase 6: Final Delivery & Ecosystem Blueprint',
+                        heading: '双端高保真健康管理平台与无缝服务蓝图交付',
+                        content: '展现全生命周期的 App 高保真界面流程设计（涵盖健康指数测定、紧急自救声波呼吸放松引导、长期排便追踪、医患云端协同）。配合底层严丝合缝的服务蓝图（Service Blueprint），全面规范前、后台服务节点，完美收尾。',
+                        imgSrc: 'image_page13.jpg', 
+                        imgLabel: '作品集.pdf - Page 13 (App UI Design Flows & Operational Service Blueprint)',
+                        pageRef: 'Page 13'
+                    }
+                ]
+            }
+        };
+
+        // Switch tabs corresponding to screen shot
+        function switchShowcaseTab(tabType) {
+            const casesGrid = document.getElementById('showcase-cases-grid');
+            const screensGallery = document.getElementById('showcase-screens-gallery');
+            const tabBtnCases = document.getElementById('tab-btn-cases');
+            const tabBtnScreens = document.getElementById('tab-btn-screens');
+
+            playCardFlickSFX();
+
+            if (tabType === 'cases') {
+                casesGrid.classList.remove('hidden');
+                screensGallery.classList.add('hidden');
+                
+                tabBtnCases.className = "px-8 py-2.5 bg-[#FFFDF6] text-[#0A0A0A] font-sans font-medium text-xs sm:text-sm rounded-full transition-all duration-300 shadow-md";
+                tabBtnScreens.className = "px-8 py-2.5 text-zinc-400 hover:text-white font-sans font-medium text-xs sm:text-sm rounded-full transition-all duration-300";
+            } else {
+                casesGrid.classList.add('hidden');
+                screensGallery.classList.remove('hidden');
+
+                tabBtnCases.className = "px-8 py-2.5 text-zinc-400 hover:text-white font-sans font-medium text-xs sm:text-sm rounded-full transition-all duration-300";
+                tabBtnScreens.className = "px-8 py-2.5 bg-[#FFFDF6] text-[#0A0A0A] font-sans font-medium text-xs sm:text-sm rounded-full transition-all duration-300 shadow-md";
+                
+                // Trigger canvas redraw and refresh dimensions
+                setTimeout(initDraggableSlider, 100);
+            }
+        }
+
+        // Draggable Horizontal Slider Logic
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+
+        function initDraggableSlider() {
+            const slider = document.getElementById('screen-slider');
+            if (!slider) return;
+
+            slider.addEventListener('mousedown', (e) => {
+                isDown = true;
+                slider.classList.add('active');
+                startX = e.pageX - slider.offsetLeft;
+                scrollLeft = slider.scrollLeft;
+            });
+
+            slider.addEventListener('mouseleave', () => {
+                isDown = false;
+                slider.classList.remove('active');
+            });
+
+            slider.addEventListener('mouseup', () => {
+                isDown = false;
+                slider.classList.remove('active');
+            });
+
+            slider.addEventListener('mousemove', (e) => {
+                if(!isDown) return;
+                e.preventDefault();
+                const x = e.pageX - slider.offsetLeft;
+                const walk = (x - startX) * 2.5; 
+                slider.scrollLeft = scrollLeft - walk;
+            });
+        }
+    </script>
+
+    <script>
+        function openProjectDetail(projectId) {
+            playCardFlickSFX();
+            const modal = document.getElementById('project-detail-modal');
+            const data = projectData[projectId === 'sheechoes' ? 'sheechoes' : 'neuragut'];
+            const contentContainer = document.getElementById('modal-dynamic-content');
+            
+            // Generate Custom Edge-to-Edge interactive top banner (Upgraded to cover style of image_084b82)
+            let headerMockupHtml = '';
+            if (projectId === 'sheechoes') {
+                headerMockupHtml = `
+                    <div class="relative w-full h-full flex items-center justify-end">
+                        <div class="absolute w-[280px] h-[390px] bg-[#1E2540] rounded-[24px] border border-white/10 shadow-2xl overflow-hidden rotate-[-4deg] translate-x-[-30px] translate-y-[20px] transition-transform duration-500 hover:rotate-0 z-20">
+                            <div class="w-full h-4 bg-black/40 flex justify-center items-center"><div class="w-12 h-2 bg-white/20 rounded-full"></div></div>
+                            <div class="p-4 space-y-3">
+                                <div class="h-4 w-16 bg-blue-500/30 rounded-full"></div>
+                                <h5 class="text-[11px] font-bold text-white leading-tight font-serif">Explore Tie-dyeing Heritage Stories</h5>
+                                <div class="w-full h-[180px] bg-[#121626] rounded-lg flex items-center justify-center relative overflow-hidden">
+                                    <div class="absolute inset-0 bg-cover bg-center opacity-70" style="background-image: url('image_084b7c.jpg');"></div>
+                                    <i class="fa-solid fa-mountain text-3xl text-white/40 z-10"></i>
+                                </div>
+                                <div class="w-full h-4 bg-emerald-500/20 border border-emerald-500/30 rounded flex items-center justify-between px-2 text-[8px] text-emerald-400">
+                                    <span>RAG Agent active</span><span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else {
+                headerMockupHtml = `
+                    <div class="relative w-full h-full flex items-center justify-end">
+                        <div class="absolute w-[280px] h-[390px] bg-zinc-900 rounded-[24px] border border-white/10 shadow-2xl overflow-hidden rotate-[3deg] translate-x-[-30px] translate-y-[20px] transition-transform duration-500 hover:rotate-0 z-20">
+                            <div class="w-full h-4 bg-black/40 flex justify-center items-center"><div class="w-12 h-2 bg-white/20 rounded-full"></div></div>
+                            <div class="p-4 space-y-3">
+                                <h5 class="text-[11px] font-bold text-white font-serif">HRV Stability Index</h5>
+                                <div class="w-full h-[170px] bg-zinc-950 border border-zinc-800 rounded-lg p-3 flex flex-col justify-between">
+                                    <div class="flex justify-between items-center"><span class="text-[8px] text-emerald-400">Wellness Index: 9.1</span><span class="text-[8px] text-zinc-500 font-mono">HRV: 68 ms</span></div>
+                                    <div class="w-full h-14 flex items-end gap-1 pb-1">
+                                        <div class="w-full h-4 bg-emerald-500/20 rounded-sm"></div>
+                                        <div class="w-full h-8 bg-emerald-500/40 rounded-sm"></div>
+                                        <div class="w-full h-5 bg-emerald-500/20 rounded-sm"></div>
+                                        <div class="w-full h-10 bg-emerald-500/50 rounded-sm"></div>
+                                        <div class="w-full h-12 bg-emerald-500/70 rounded-sm animate-pulse"></div>
+                                    </div>
+                                    <span class="text-[6px] font-mono text-zinc-500 text-center uppercase tracking-widest">Autonomous loop feedback</span>
+                                </div>
+                                <div class="h-2 w-full bg-white/10 rounded-full overflow-hidden"><div class="h-full bg-emerald-400 w-3/4"></div></div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // Expanded containers inside the modal to make content stretch and fill the screen beautifully (up to 1500px)
+            let htmlStr = `
+                <div class="relative w-full overflow-hidden ${data.bannerBg} min-h-[480px] md:min-h-[560px] flex items-center group mb-16 border-b border-white/10">
+                    <div class="max-w-[1500px] mx-auto w-full px-6 md:px-16 lg:px-24 grid grid-cols-1 md:grid-cols-12 gap-8 items-center relative pt-16 md:pt-0">
+                        <!-- Left Panel Text description -->
+                        <div class="md:col-span-7 space-y-6 text-left relative z-20">
+                            <div class="absolute -top-16 -left-6 text-[10rem] md:text-[14rem] font-serif font-black text-white/5 select-none pointer-events-none leading-none">
+                                ${data.projectNum}
+                            </div>
+                            
+                            <div class="relative w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center border border-white/20 backdrop-blur">
+                                <i class="fa-solid ${projectId === 'sheechoes' ? 'fa-shirt text-blue-300' : 'fa-wave-square text-emerald-300'} text-2xl"></i>
+                            </div>
+
+                            <div class="space-y-3 relative">
+                                <h1 class="text-4xl sm:text-5xl md:text-6xl font-serif text-[#FFFDF6] font-bold leading-tight tracking-tight">
+                                    ${data.title}
+                                </h1>
+                                <p class="text-xl md:text-2xl text-zinc-300 font-serif leading-snug italic opacity-90 max-w-3xl">
+                                    ${data.subTitle}
+                                </p>
+                            </div>
+                            
+                            <div class="inline-block px-4 py-2 bg-white/10 border border-white/15 rounded-full text-xs font-mono tracking-wider uppercase text-zinc-200">
+                                ${data.techStack}
+                            </div>
+                        </div>
+                        
+                        <!-- Right Curved Overlay Device Showcase - Stretched Wide Arc exactly like image_084b82 -->
+                        <div class="md:col-span-5 h-[340px] md:h-[460px] relative z-20 hidden md:block">
+                            <div class="absolute right-[-120px] top-[10%] w-[115%] h-[90%] bg-[#FFFDF6] rounded-l-[300px] overflow-hidden shadow-2xl flex items-center justify-center p-8 border-l border-white/10">
+                                ${headerMockupHtml}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Case Metadata details - stretched content container -->
+                <div class="max-w-[1500px] mx-auto px-6 md:px-16 lg:px-24 py-12">
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-8 py-8 border-y border-white/10 mb-16">
+                        <div>
+                            <h4 class="text-[10px] font-mono text-zinc-500 uppercase tracking-widest mb-2">Role</h4>
+                            <p class="text-sm font-semibold text-white">${data.meta.role}</p>
+                        </div>
+                        <div>
+                            <h4 class="text-[10px] font-mono text-zinc-500 uppercase tracking-widest mb-2">Team</h4>
+                            <p class="text-sm font-semibold text-white">${data.meta.team}</p>
+                        </div>
+                        <div>
+                            <h4 class="text-[10px] font-mono text-zinc-500 uppercase tracking-widest mb-2">Platform</h4>
+                            <p class="text-sm font-semibold text-white">${data.meta.platform}</p>
+                        </div>
+                        <div>
+                            <h4 class="text-[10px] font-mono text-zinc-500 uppercase tracking-widest mb-2">Date</h4>
+                            <p class="text-sm font-semibold text-white">${data.meta.date}</p>
+                        </div>
+                    </div>
+
+                    <!-- Detail Sections Loop organized logically - Maximized Width to display high res schemas -->
+                    <div class="space-y-28 max-w-[1500px] mx-auto">
+            `;
+
+            data.sections.forEach((sec, idx) => {
+                htmlStr += `
+                    <div class="scroll-fade-in opacity-0 translate-y-10 transition-all duration-700 ease-out" style="transition-delay: ${idx * 150}ms">
+                        <div class="flex items-center gap-3 mb-4">
+                            <span class="text-[10px] font-mono text-indigo-400 bg-indigo-500/10 px-3 py-1 rounded-full uppercase tracking-widest font-bold">
+                                ${sec.phase}
+                            </span>
+                            <span class="h-[1px] w-12 bg-zinc-800"></span>
+                            <span class="text-[10px] font-mono text-zinc-500">Ref: ${sec.pageRef}</span>
+                        </div>
+                        <h3 class="text-2xl md:text-3xl lg:text-4xl font-serif text-[#FFFDF6] font-bold mb-5">${sec.heading}</h3>
+                        <p class="text-zinc-300 text-base md:text-lg leading-relaxed mb-10">${sec.content}</p>
+                        
+                        <!-- Infinite Height Image Container stretched to maximize layout width -->
+                        <div class="w-full flex flex-col items-center justify-center bg-[#111113] rounded-[24px] border border-white/5 p-2 sm:p-4 md:p-6 mb-12 relative overflow-hidden group">
+                            <!-- Real Image loader -->
+                            <img src="${sec.imgSrc}" alt="${sec.heading}" class="w-full h-auto block rounded-2xl shadow-2xl object-cover hover:scale-[1.01] transition-transform duration-500 hidden" 
+                                 onload="this.classList.remove('hidden'); this.nextElementSibling.classList.add('hidden');" 
+                                 onerror="this.classList.add('hidden'); this.nextElementSibling.classList.remove('hidden');" />
+                            
+                            <!-- Custom Designed PDF Page Placeholder - Optimized wide layout -->
+                            <div class="w-full min-h-[350px] sm:min-h-[500px] flex flex-col items-center justify-center border-2 border-dashed border-white/10 rounded-xl bg-zinc-900/30 p-8 text-center">
+                                <i class="fa-solid fa-file-pdf text-5xl text-zinc-600 mb-6 group-hover:scale-110 group-hover:text-indigo-400 transition-all duration-300"></i>
+                                <h4 class="text-zinc-400 font-syne text-sm sm:text-base font-bold uppercase tracking-widest mb-2 text-center px-4">
+                                    ${sec.imgLabel}
+                                </h4>
+                                <p class="text-zinc-600 font-mono text-[10px] text-center px-4 max-w-2xl leading-relaxed">
+                                    [ PDF Reference: ${sec.pageRef} ]<br>
+                                    将您作品集.pdf对应的切图导出命名为 <span class="text-indigo-400 font-semibold">"${sec.imgSrc}"</span> 并放入该目录下，即可无缝动态加载展现！
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            htmlStr += `</div></div>`;
+            contentContainer.innerHTML = htmlStr;
+
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            modal.scrollTop = 0;
+
+            // Trigger fade-in animation for sections
+            setTimeout(() => {
+                const fadeElements = contentContainer.querySelectorAll('.scroll-fade-in');
+                fadeElements.forEach(el => {
+                    el.classList.remove('opacity-0', 'translate-y-10');
+                });
+            }, 100);
+        }
+
+        function closeProjectDetail() {
+            playCardFlickSFX();
+            const modal = document.getElementById('project-detail-modal');
+            modal.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+    </script>
+
+    <script>
+        // Switch Reviews list
+        const reviewsData = [
+            {
+                quote: "“声敏在合作中展现出极为少见的高质量全栈 UI/UX 推导与产品 definition 能力。无论是复杂 RAG AI Agent 还是软硬件联调，产出的方案严谨且极具美学张力，是极有潜力的复合型产品候选人。”",
+                author: "Tsherundede Ejueyitchie",
+                role: "CEO, Kellon"
+            },
+            {
+                quote: "“阿敏她是真的愿意蹲下来听我们说话的人。她把我们的故事讲给更多年轻人听，也让我们看见了传承新的可能。”",
+                author: "李阿婆 (Ms. Li)",
+                role: "大理周城村非遗扎染传承人 / 联合发起人"
+            },
+            {
+                quote: "“她兼具设计思维与技术能力，对新领域始终保持好奇与钻研精神，是少见的跨学科复合型人才。”",
+                author: "张教授 (Prof. Zhang)",
+                role: "齐鲁工业大学新媒体技术系教授"
+            }
+        ];
+
+        function switchTestimonial(index) {
+            const card = document.getElementById('testimonial-card');
+            const quoteEl = document.getElementById('testimonial-quote');
+            const authorEl = document.getElementById('testimonial-author');
+            const roleEl = document.getElementById('testimonial-role');
+            const avatarBtns = document.querySelectorAll('.avatar-btn');
+
+            card.classList.add('opacity-0', 'scale-95');
+
+            setTimeout(() => {
+                const activeData = reviewsData[index];
+                quoteEl.innerText = activeData.quote;
+                authorEl.innerText = activeData.author;
+                roleEl.innerText = activeData.role;
+
+                avatarBtns.forEach((btn, idx) => {
+                    const ring = btn.querySelector('.ring-container');
+                    if (idx === index) {
+                        btn.classList.add('active-avatar', 'scale-110');
+                        ring.className = "w-16 h-16 rounded-full overflow-hidden border-2 border-white p-1 transition-all duration-300 ring-container ring-4 ring-offset-2 ring-offset-black ring-white/10";
+                    } else {
+                        btn.classList.remove('active-avatar', 'scale-110');
+                        ring.className = "w-16 h-16 rounded-full overflow-hidden border-2 border-transparent p-1 transition-all duration-300 ring-container opacity-50";
+                    }
+                });
+
+                card.classList.remove('opacity-0', 'scale-95');
+                card.classList.add('opacity-100', 'scale-100');
+            }, 250);
+        }
+    </script>
+
+    <script>
+        // Ambient Background Particle Physics
+        const canvas = document.getElementById('ambient-canvas');
+        const ctx = canvas.getContext('2d');
+        let points = [];
+        const numPoints = 20;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            initPoints();
+        }
+
+        function initPoints() {
+            points = [];
+            for (let i = 0; i < numPoints; i++) {
+                points.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    vx: (Math.random() - 0.5) * 0.4,
+                    vy: (Math.random() - 0.5) * 0.4,
+                    r: Math.random() * 2 + 1
+                });
+            }
+        }
+
+        function animateCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.strokeStyle = 'rgba(13, 47, 107, 0.15)';
+            ctx.fillStyle = 'rgba(46, 229, 157, 0.2)';
+
+            for (let i = 0; i < points.length; i++) {
+                let p1 = points[i];
+                p1.x += p1.vx;
+                p1.y += p1.vy;
+
+                if (p1.x < 0 || p1.x > canvas.width) p1.vx *= -1;
+                if (p1.y < 0 || p1.y > canvas.height) p1.vy *= -1;
+
+                ctx.beginPath();
+                ctx.arc(p1.x, p1.y, p1.r, 0, Math.PI * 2);
+                ctx.fill();
+
+                for (let j = i + 1; j < points.length; j++) {
+                    let p2 = points[j];
+                    let dist = Math.hypot(p1.x - p2.x, p1.y - p2.y);
+                    if (dist < 150) {
+                        ctx.beginPath();
+                        ctx.moveTo(p1.x, p1.y);
+                        ctx.lineTo(p2.x, p2.y);
+                        ctx.stroke();
+                    }
+                }
+            }
+            requestAnimationFrame(animateCanvas);
+        }
+
+        // Eyeball Pointer Tracking Logic
+        document.addEventListener('mousemove', function(e) {
+            const pupils = document.querySelectorAll('.pupil');
+            pupils.forEach(pupil => {
+                const rect = pupil.parentElement.getBoundingClientRect();
+                const eyeX = rect.left + rect.width / 2;
+                const eyeY = rect.top + rect.height / 2;
+                
+                const angle = Math.atan2(e.clientY - eyeY, e.clientX - eyeX);
+                // Limit the offset translation from the eye center
+                const maxOffset = 4.5; 
+                const distance = Math.min(maxOffset, Math.hypot(e.clientX - eyeX, e.clientY - eyeY) / 18);
+                const x = Math.cos(angle) * distance;
+                const y = Math.sin(angle) * distance;
+                
+                pupil.style.transform = `translate(${x}px, ${y}px)`;
+            });
+
+            // Magnet button attraction
+            const magnets = document.querySelectorAll('.magnet-target');
+            magnMagnets = document.querySelectorAll('.magnet-target');
+            magnets.forEach(magnet => {
+                const rect = magnet.getBoundingClientRect();
+                const x = rect.left + rect.width / 2;
+                const y = rect.top + rect.height / 2;
+                const dist = Math.hypot(e.clientX - x, e.clientY - y);
+                
+                if (dist < 80) {
+                    const strength = 12;
+                    const deltaX = (e.clientX - x) / strength;
+                    const deltaY = (e.clientY - y) / strength;
+                    magnet.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+                } else {
+                    magnet.style.transform = 'translate(0px, 0px)';
+                }
+            });
+        });
+
+        // Trigger Coin claiming audio micro interactions
+        function triggerClaimCoins() {
+            const btn = document.getElementById('claim-btn');
+            if (btn.innerText === "CLAIMED") return;
+            
+            // Audio effect
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(587.33, audioCtx.currentTime); // D5
+            osc.frequency.setValueAtTime(880, audioCtx.currentTime + 0.1); // A5
+            gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.3);
+
+            btn.innerText = "CLAIMED";
+            btn.className = "w-full py-4 bg-zinc-800 text-zinc-500 font-syne font-black rounded-2xl text-xs uppercase tracking-wider cursor-not-allowed";
+            showToast("Successfully claimed 100 gold coins! 🪙");
+        }
+
+        // Toggle Audio visualizer inside bio card
+        let waveTimer = null;
+        function toggleAudioVisualizer() {
+            const icon = document.getElementById('wave-play-icon');
+            const bars = document.querySelectorAll('.bar-wave');
+
+            if (icon.classList.contains('fa-play')) {
+                icon.classList.replace('fa-play', 'fa-pause');
+                bars.forEach(bar => bar.classList.replace('bg-zinc-700', 'bg-indigo-400'));
+                
+                // Play oscillator
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+
+                waveTimer = setInterval(() => {
+                    bars.forEach(bar => {
+                        const ranH = Math.floor(Math.random() * 18) + 6;
+                        bar.style.height = `${ranH}px`;
+                    });
+                }, 100);
+            } else {
+                icon.classList.replace('fa-pause', 'fa-play');
+                bars.forEach(bar => {
+                    bar.classList.replace('bg-indigo-400', 'bg-zinc-700');
+                    bar.style.height = '10px';
+                });
+                clearInterval(waveTimer);
+            }
+        }
+    </script>
+
+    <script>
+        // ----------------------------------------------------
+        // AI sandbox Rigid-body Collision Engine
+        // ----------------------------------------------------
+        const aiCanvas = document.getElementById('ai-physics-canvas');
+        const aiCtx = aiCanvas.getContext('2d');
+        let aiBalls = [];
+        let aiMouse = { x: -1000, y: -1000, active: false };
+
+        // 升级版物理小球：加入了 Cursor, Gemini, Codex, Framer, Stitch 等高端全栈和AI工具
+        const ballTypes = [
+            { type: 'figma', label: 'Figma', bg: '#FFFFFF', color: '#F24E1E' },
+            { type: 'blender', label: 'Blender', bg: '#FFFFFF', color: '#EA7600' },
+            { type: 'arduino', label: 'Arduino', bg: '#FFFFFF', color: '#00979D' },
+            { type: 'processing', label: 'Processing', bg: '#FFFFFF', color: '#012A5E' },
+            { type: 'mysql', label: 'MySQL', bg: '#FFFFFF', color: '#00758F' },
+            { type: 'spline', label: 'Spline', bg: '#FFFFFF', color: '#FF5C00' },
+            { type: 'photoshop', label: 'PS', bg: '#FFFFFF', color: '#31A8FF' },
+            { type: 'illustrator', label: 'AI', bg: '#FFFFFF', color: '#FF9A00' },
+            { type: 'chatgpt', label: 'ChatGPT', bg: '#FFFFFF', color: '#00A67E' },
+            { type: 'midjourney', label: 'Midjourney', bg: '#FFFFFF', color: '#D97706', isSpark: true },
+            { type: 'claude', label: 'Claude', bg: '#FFFFFF', color: '#D97706' },
+            { type: 'openai', label: 'OpenAI', bg: '#FFFFFF', color: '#10B981' },
+            { type: 'v0', label: 'v0', bg: '#FFFFFF', color: '#000000' },
+            { type: 'lovable', label: 'Lovable', bg: '#FFFFFF', color: '#EC4899' },
+            { type: 'make', label: 'Make', bg: '#FFFFFF', color: '#EC4899' },
+            
+            // 新增AI与技术设计软件
+            { type: 'cursor', label: 'Cursor', bg: '#FFFFFF', color: '#31A8FF' },
+            { type: 'gemini', label: 'Gemini', bg: '#FFFFFF', color: '#1A73E8' },
+            { type: 'codex', label: 'Codex', bg: '#FFFFFF', color: '#00A67E' },
+            { type: 'framer', label: 'Framer', bg: '#FFFFFF', color: '#0055FF' },
+            { type: 'stitch', label: 'Stitch', bg: '#FFFFFF', color: '#FF4F00' }
+        ];
+
+        function resizeAiCanvas() {
+            const parent = aiCanvas.parentElement;
+            aiCanvas.width = parent.clientWidth;
+            aiCanvas.height = aiCanvas.clientHeight || 500;
+            
+            aiBalls.forEach(ball => {
+                ball.x = Math.max(ball.r, Math.min(aiCanvas.width - ball.r, ball.x));
+                ball.y = Math.min(aiCanvas.height - ball.r - 10, ball.y);
+            });
+        }
+
+        function initAiPhysics() {
+            resizeAiCanvas();
+            aiBalls = [];
+            
+            ballTypes.forEach(spec => {
+                for (let k = 0; k < 1; k++) {
+                    const radius = aiCanvas.width < 640 ? Math.random() * 4 + 32 : Math.random() * 6 + 44; 
+                    aiBalls.push({
+                        x: Math.random() * (aiCanvas.width - radius * 2) + radius,
+                        y: Math.random() * (aiCanvas.height / 2 - radius) + radius,
+                        vx: (Math.random() - 0.5) * 4,
+                        vy: Math.random() * 2,
+                        r: radius,
+                        mass: radius * 0.15,
+                        restitution: 0.55,
+                        friction: 0.98,
+                        angle: Math.random() * Math.PI * 2,
+                        angularVelocity: (Math.random() - 0.5) * 0.005, 
+                        type: spec.type,
+                        label: spec.label,
+                        bg: spec.bg,
+                        color: spec.color,
+                        isSpark: spec.isSpark
+                    });
+                }
+            });
+
+            aiCanvas.addEventListener('mousemove', (e) => {
+                const rect = aiCanvas.getBoundingClientRect();
+                aiMouse.x = e.clientX - rect.left;
+                aiMouse.y = e.clientY - rect.top;
+                aiMouse.active = true;
+            });
+
+            aiCanvas.addEventListener('mouseleave', () => {
+                aiMouse.active = false;
+                aiMouse.x = -1000;
+                aiMouse.y = -1000;
+            });
+
+            updateAiPhysics();
+        }
+
+        function updateAiPhysics() {
+            const gravity = 0.35;
+            const subSteps = 6;
+
+            for (let step = 0; step < subSteps; step++) {
+                for (let i = 0; i < aiBalls.length; i++) {
+                    const b = aiBalls[i];
+
+                    if (step === 0) {
+                        b.vy += gravity / subSteps;
+                        b.vx *= Math.pow(b.friction, 1 / subSteps);
+                        b.vy *= Math.pow(b.friction, 1 / subSteps);
+                        b.angularVelocity *= Math.pow(0.93, 1 / subSteps); 
+                        
+                        b.x += b.vx / subSteps;
+                        b.y += b.vy / subSteps;
+                        b.angle += b.angularVelocity / subSteps;
+                    } else {
+                        b.x += b.vx / subSteps;
+                        b.y += b.vy / subSteps;
+                        b.angle += b.angularVelocity / subSteps;
+                    }
+
+                    if (aiMouse.active) {
+                        const dx = b.x - aiMouse.x;
+                        const dy = b.y - aiMouse.y;
+                        const dist = Math.hypot(dx, dy);
+                        const pushDist = b.r + 70;
+                        if (dist < pushDist && dist > 1) {
+                            const force = (pushDist - dist) * 0.05;
+                            b.vx += (dx / dist) * force;
+                            b.vy += (dy / dist) * force;
+                            b.angularVelocity += (dx > 0 ? 1 : -1) * force * 0.001; 
+                        }
+                    }
+
+                    if (b.y + b.r > aiCanvas.height) {
+                        b.y = aiCanvas.height - b.r;
+                        b.vy = -Math.abs(b.vy) * b.restitution;
+                        b.vx *= 0.95;
+                        b.angularVelocity *= 0.92;
+                    }
+                    if (b.y - b.r < 0) {
+                        b.y = b.r;
+                        b.vy = Math.abs(b.vy) * b.restitution;
+                    }
+                    if (b.x - b.r < 0) {
+                        b.x = b.r;
+                        b.vx = Math.abs(b.vx) * b.restitution;
+                        b.angularVelocity *= 0.92;
+                    }
+                    if (b.x + b.r > aiCanvas.width) {
+                        b.x = aiCanvas.width - b.r;
+                        b.vx = -Math.abs(b.vx) * b.restitution;
+                        b.angularVelocity *= 0.92;
+                    }
+
+                    for (let j = i + 1; j < aiBalls.length; j++) {
+                        const target = aiBalls[j];
+                        const dx = target.x - b.x;
+                        const dy = target.y - b.y;
+                        const dist = Math.hypot(dx, dy);
+                        const minDist = b.r + target.r;
+
+                        if (dist < minDist) {
+                            const overlap = minDist - dist;
+                            const normalX = dx / dist;
+                            const normalY = dy / dist;
+
+                            const pushForce = overlap * 0.5;
+                            b.x -= normalX * pushForce;
+                            b.y -= normalY * pushForce;
+                            target.x += normalX * pushForce;
+                            target.y += normalY * pushForce;
+
+                            const kx = b.vx - target.vx;
+                            const ky = b.vy - target.vy;
+                            const vn = kx * normalX + ky * normalY;
+
+                            if (vn > 0) {
+                                const impulseScalar = (1 + b.restitution) * vn / (1/b.mass + 1/target.mass);
+                                b.vx -= (impulseScalar / b.mass) * normalX;
+                                b.vy -= (impulseScalar / b.mass) * normalY;
+                                target.vx += (impulseScalar / target.mass) * normalX;
+                                target.vy += (impulseScalar / target.mass) * normalY;
+
+                                const tx = -normalY;
+                                const ty = normalX;
+                                const vt = kx * tx + ky * ty;
+                                const tangentialImpulse = vt * 0.02;
+                                b.angularVelocity -= tangentialImpulse * 0.02;
+                                target.angularVelocity += tangentialImpulse * 0.02;
+                            }
+                        }
+                    }
+                }
+            }
+
+            renderAiPhysics();
+            requestAnimationFrame(updateAiPhysics);
+        }
+
+        function renderAiPhysics() {
+            aiCtx.clearRect(0, 0, aiCanvas.width, aiCanvas.height);
+
+            if (aiMouse.active) {
+                const gradient = aiCtx.createRadialGradient(aiMouse.x, aiMouse.y, 5, aiMouse.x, aiMouse.y, 80);
+                gradient.addColorStop(0, 'rgba(245, 158, 11, 0.05)');
+                gradient.addColorStop(1, 'rgba(245, 158, 11, 0)');
+                aiCtx.fillStyle = gradient;
+                aiCtx.beginPath();
+                aiCtx.arc(aiMouse.x, aiMouse.y, 80, 0, Math.PI * 2);
+                aiCtx.fill();
+            }
+
+            for (let i = 0; i < aiBalls.length; i++) {
+                const b = aiBalls[i];
+
+                aiCtx.save();
+
+                aiCtx.save();
+                aiCtx.font = "bold 10px 'Space Grotesk', 'Inter', sans-serif";
+                aiCtx.fillStyle = "rgba(255, 255, 255, 0.8)";
+                aiCtx.textAlign = "center";
+                aiCtx.textBaseline = "bottom";
+                aiCtx.fillText(b.label, b.x, b.y - b.r - 6);
+                aiCtx.restore();
+
+                aiCtx.translate(b.x, b.y);
+
+                aiCtx.save();
+                aiCtx.rotate(b.angle);
+
+                aiCtx.shadowColor = 'rgba(0, 0, 0, 0.15)';
+                aiCtx.shadowBlur = 10;
+                aiCtx.shadowOffsetY = 4;
+
+                const grad = aiCtx.createRadialGradient(-b.r/4, -b.r/4, b.r/10, 0, 0, b.r);
+                grad.addColorStop(0, '#FFFFFF');
+                grad.addColorStop(0.75, '#F4F4F6'); 
+                grad.addColorStop(1, '#DBDBE0');   
+
+                aiCtx.fillStyle = grad;
+                aiCtx.beginPath();
+                aiCtx.arc(0, 0, b.r, 0, Math.PI * 2);
+                aiCtx.fill();
+
+                aiCtx.shadowColor = 'transparent';
+                aiCtx.shadowBlur = 0;
+                aiCtx.shadowOffsetY = 0;
+
+                const glossGrad = aiCtx.createLinearGradient(0, -b.r, 0, b.r);
+                glossGrad.addColorStop(0, 'rgba(255, 255, 255, 0.35)');
+                glossGrad.addColorStop(0.4, 'rgba(255, 255, 255, 0)');
+                glossGrad.addColorStop(1, 'rgba(0, 0, 0, 0.05)');
+                aiCtx.fillStyle = glossGrad;
+                aiCtx.beginPath();
+                aiCtx.arc(0, 0, b.r, 0, Math.PI * 2);
+                aiCtx.fill();
+
+                aiCtx.fillStyle = b.color;
+                aiCtx.textBaseline = 'middle';
+                aiCtx.textAlign = 'center';
+
+                if (b.type === 'figma') {
+                    const s = b.r * 0.38;
+                    // Row 1 (Top)
+                    aiCtx.fillStyle = '#F24E1E';
+                    aiCtx.beginPath(); aiCtx.arc(-s, -s*1.2, s, Math.PI/2, Math.PI*1.5); aiCtx.fill();
+                    aiCtx.fillRect(-s, -s*2.2, s, s*2);
+                    aiCtx.beginPath(); aiCtx.arc(0, -s*1.2, s, 0, Math.PI*2); aiCtx.fill();
+                    // Row 2 (Middle)
+                    aiCtx.fillStyle = '#A259FF';
+                    aiCtx.beginPath(); aiCtx.arc(-s, 0, s, Math.PI/2, Math.PI*1.5); aiCtx.fill();
+                    aiCtx.fillRect(-s, -s, s, s*2);
+                    aiCtx.fillStyle = '#1ABCFE';
+                    aiCtx.beginPath(); aiCtx.arc(0, 0, s, 0, Math.PI*2); aiCtx.fill();
+                    // Row 3 (Bottom)
+                    aiCtx.fillStyle = '#0ACF83';
+                    aiCtx.beginPath(); aiCtx.arc(-s, s*1.2, s, 0, Math.PI*2); aiCtx.fill();
+                    aiCtx.fillRect(-s, s*0.2, s, s);
+                    aiCtx.beginPath(); aiCtx.arc(0, s*1.2, s, -Math.PI/2, Math.PI/2); aiCtx.fill();
+                } else if (b.type === 'arduino') {
+                    aiCtx.strokeStyle = '#00979D';
+                    aiCtx.lineWidth = b.r * 0.13;
+                    aiCtx.beginPath();
+                    aiCtx.arc(-b.r*0.3, -1, b.r*0.3, 0, Math.PI*2);
+                    aiCtx.arc(b.r*0.3, -1, b.r*0.3, 0, Math.PI*2);
+                    aiCtx.stroke();
+                    aiCtx.fillStyle = '#00979D';
+                    aiCtx.font = `bold ${b.r * 0.45}px sans-serif`;
+                    aiCtx.fillText('-', -b.r*0.3, -2);
+                    aiCtx.fillText('+', b.r*0.3, -2);
+                } else if (b.type === 'blender') {
+                    aiCtx.fillStyle = '#EA7600';
+                    aiCtx.beginPath();
+                    aiCtx.arc(0, -2, b.r*0.52, 0, Math.PI*2);
+                    aiCtx.fill();
+                    aiCtx.fillStyle = '#FFFFFF';
+                    aiCtx.beginPath();
+                    aiCtx.arc(0, -2, b.r*0.22, 0, Math.PI*2);
+                    aiCtx.fill();
+                    aiCtx.strokeStyle = '#FFFFFF';
+                    aiCtx.lineWidth = b.r*0.07;
+                    aiCtx.beginPath();
+                    aiCtx.moveTo(0, -2 - b.r*0.22); aiCtx.lineTo(0, -2 - b.r*0.62);
+                    aiCtx.moveTo(b.r*0.16, -2 - b.r*0.14); aiCtx.lineTo(b.r*0.5, -2 - b.r*0.42);
+                    aiCtx.moveTo(b.r*0.22, -2); aiCtx.lineTo(b.r*0.62, -2 - b.r*0.07);
+                    aiCtx.stroke();
+                } else if (b.type === 'processing') {
+                    aiCtx.fillStyle = '#012A5E';
+                    aiCtx.font = `italic bold ${b.r * 0.85}px sans-serif`;
+                    aiCtx.fillText('P', 0, -2);
+                } else if (b.type === 'mysql') {
+                    const w = b.r * 0.6;
+                    const h = b.r * 0.18;
+                    aiCtx.fillStyle = '#00758F';
+                    aiCtx.strokeStyle = '#FFFFFF';
+                    aiCtx.lineWidth = b.r * 0.055;
+                    for (let j = -1.0; j <= 0.8; j++) {
+                        aiCtx.beginPath();
+                        aiCtx.ellipse(0, j*b.r*0.3 - 1, w, h, 0, 0, Math.PI*2);
+                        aiCtx.fill();
+                        aiCtx.stroke();
+                    }
+                } else if (b.type === 'photoshop') {
+                    aiCtx.fillStyle = '#001E36';
+                    aiCtx.fillRect(-b.r*0.6, -b.r*0.6, b.r*1.2, b.r*1.2);
+                    aiCtx.fillStyle = '#31A8FF';
+                    aiCtx.font = `bold ${b.r * 0.58}px sans-serif`;
+                    aiCtx.fillText('Ps', 0, 0);
+                } else if (b.type === 'illustrator') {
+                    aiCtx.fillStyle = '#330000';
+                    aiCtx.fillRect(-b.r*0.6, -b.r*0.6, b.r*1.2, b.r*1.2);
+                    aiCtx.fillStyle = '#FF9A00';
+                    aiCtx.font = `bold ${b.r * 0.58}px sans-serif`;
+                    aiCtx.fillText('Ai', 0, 0);
+                } else if (b.type === 'spline') {
+                    aiCtx.strokeStyle = '#FF5C00';
+                    aiCtx.lineWidth = b.r * 0.09;
+                    const size = b.r * 0.65;
+                    aiCtx.beginPath();
+                    for (let j = 0; j < 6; j++) {
+                        const angle = (Math.PI / 3) * j;
+                        const px = Math.cos(angle) * size;
+                        const py = Math.sin(angle) * size;
+                        if (j === 0) aiCtx.moveTo(px, py);
+                        else aiCtx.lineTo(px, py);
+                    }
+                    aiCtx.closePath();
+                    aiCtx.stroke();
+                    aiCtx.beginPath();
+                    for (let j = 0; j < 6; j += 2) {
+                        const angle = (Math.PI / 3) * j;
+                        aiCtx.moveTo(0, 0);
+                        aiCtx.lineTo(Math.cos(angle) * size, Math.sin(angle) * size);
+                    }
+                    aiCtx.stroke();
+                } else if (b.type === 'chatgpt' || b.type === 'openai') {
+                    aiCtx.strokeStyle = '#00A67E';
+                    aiCtx.lineWidth = b.r * 0.12;
+                    aiCtx.lineCap = 'round';
+                    aiCtx.lineJoin = 'round';
+                    aiCtx.save();
+                    for (let j = 0; j < 6; j++) {
+                        aiCtx.rotate(Math.PI / 3);
+                        aiCtx.beginPath();
+                        aiCtx.moveTo(0, -b.r * 0.18);
+                        aiCtx.lineTo(0, -b.r * 0.55);
+                        aiCtx.arc(b.r * 0.185, -b.r * 0.55, b.r * 0.185, Math.PI, 0, true);
+                        aiCtx.stroke();
+                    }
+                    aiCtx.restore();
+                } else if (b.isSpark) {
+                    aiCtx.fillStyle = '#D97706';
+                    const s = b.r * 0.65;
+                    aiCtx.beginPath();
+                    aiCtx.moveTo(0, -s);
+                    aiCtx.quadraticCurveTo(0, 0, s, 0);
+                    aiCtx.quadraticCurveTo(0, 0, 0, s);
+                    aiCtx.quadraticCurveTo(0, 0, -s, 0);
+                    aiCtx.quadraticCurveTo(0, 0, 0, -s);
+                    aiCtx.fill();
+                } else if (b.type === 'claude') {
+                    aiCtx.fillStyle = '#CC9980';
+                    aiCtx.save();
+                    aiCtx.translate(0, -b.r * 0.05);
+                    for (let j = 0; j < 9; j++) {
+                        aiCtx.rotate(Math.PI * 2 / 9);
+                        aiCtx.beginPath();
+                        aiCtx.ellipse(0, -b.r * 0.38, b.r * 0.16, b.r * 0.32, 0, 0, Math.PI * 2);
+                        aiCtx.fill();
+                    }
+                    aiCtx.beginPath();
+                    aiCtx.arc(0, 0, b.r * 0.22, 0, Math.PI * 2);
+                    aiCtx.fill();
+                    aiCtx.restore();
+                } else if (b.type === 'v0') {
+                    aiCtx.fillStyle = '#000000';
+                    aiCtx.font = `900 ${b.r * 0.8}px 'Syne', sans-serif`;
+                    aiCtx.fillText('v0', 0, 0);
+                } else if (b.type === 'lovable') {
+                    aiCtx.save();
+                    const hSz = b.r * 0.5;
+                    aiCtx.save();
+                    aiCtx.translate(0, -b.r * 0.1);
+                    const heartGrad = aiCtx.createLinearGradient(-hSz, -hSz, hSz, hSz);
+                    heartGrad.addColorStop(0, '#FF4B72');
+                    heartGrad.addColorStop(0.5, '#A855F7');
+                    heartGrad.addColorStop(1, '#6366F1');
+                    aiCtx.fillStyle = heartGrad;
+                    aiCtx.beginPath();
+                    aiCtx.moveTo(0, -hSz * 0.3);
+                    aiCtx.bezierCurveTo(-hSz * 0.5, -hSz * 0.9, -hSz, -hSz * 0.5, -hSz, 0);
+                    aiCtx.bezierCurveTo(-hSz, hSz * 0.5, -hSz * 0.3, hSz * 0.8, 0, hSz);
+                    aiCtx.bezierCurveTo(hSz * 0.3, hSz * 0.8, hSz, hSz * 0.5, hSz, 0);
+                    aiCtx.bezierCurveTo(hSz, -hSz * 0.5, hSz * 0.5, -hSz * 0.9, 0, -hSz * 0.3);
+                    aiCtx.closePath();
+                    aiCtx.fill();
+                    aiCtx.restore();
+
+                    aiCtx.fillStyle = '#000000';
+                    aiCtx.font = `bold ${b.r * 0.26}px sans-serif`;
+                    aiCtx.fillText('Lovable', 0, b.r * 0.58);
+                    aiCtx.restore();
+                } else if (b.type === 'make') {
+                    aiCtx.fillStyle = '#EC4899';
+                    aiCtx.font = `bold ${b.r * 0.5}px sans-serif`;
+                    aiCtx.fillText('Make', 0, 0);
+                } else if (b.type === 'cursor') {
+                    aiCtx.strokeStyle = '#31A8FF';
+                    aiCtx.lineWidth = b.r * 0.13;
+                    aiCtx.lineCap = 'round';
+                    aiCtx.save();
+                    aiCtx.beginPath();
+                    aiCtx.arc(-b.r*0.16, 0, b.r*0.38, -Math.PI*0.4, Math.PI*1.4);
+                    aiCtx.stroke();
+                    aiCtx.strokeStyle = '#00F5FF';
+                    aiCtx.beginPath();
+                    aiCtx.arc(b.r*0.16, 0, b.r*0.38, Math.PI*0.6, Math.PI*2.4);
+                    aiCtx.stroke();
+                    aiCtx.restore();
+                } else if (b.type === 'gemini') {
+                    const s = b.r * 0.8;
+                    const grad = aiCtx.createLinearGradient(-s, -s, s, s);
+                    grad.addColorStop(0, '#93C5FD');
+                    grad.addColorStop(0.5, '#A78BFA');
+                    grad.addColorStop(1, '#F472B6');
+                    aiCtx.fillStyle = grad;
+                    aiCtx.beginPath();
+                    aiCtx.moveTo(0, -s);
+                    aiCtx.quadraticCurveTo(0, 0, s, 0);
+                    aiCtx.quadraticCurveTo(0, 0, 0, s);
+                    aiCtx.quadraticCurveTo(0, 0, -s, 0);
+                    aiCtx.quadraticCurveTo(0, 0, 0, -s);
+                    aiCtx.fill();
+                    aiCtx.fillStyle = '#FFFFFF';
+                    aiCtx.beginPath();
+                    aiCtx.arc(0, 0, b.r*0.14, 0, Math.PI*2);
+                    aiCtx.fill();
+                } else if (b.type === 'codex') {
+                    aiCtx.strokeStyle = '#00A67E';
+                    aiCtx.lineWidth = b.r * 0.1;
+                    const size = b.r * 0.52;
+                    aiCtx.beginPath();
+                    for (let j = 0; j < 6; j++) {
+                        const angle = (Math.PI / 3) * j;
+                        const px = Math.cos(angle) * size;
+                        const py = Math.sin(angle) * size;
+                        if (j === 0) aiCtx.moveTo(px, py);
+                        else aiCtx.lineTo(px, py);
+                    }
+                    aiCtx.closePath();
+                    aiCtx.stroke();
+                    aiCtx.beginPath();
+                    aiCtx.moveTo(0, 0); aiCtx.lineTo(0, -size);
+                    aiCtx.moveTo(0, 0); aiCtx.lineTo(Math.cos(Math.PI/6)*size, Math.sin(Math.PI/6)*size);
+                    aiCtx.moveTo(0, 0); aiCtx.lineTo(-Math.cos(Math.PI/6)*size, Math.sin(Math.PI/6)*size);
+                    aiCtx.stroke();
+                } else if (b.type === 'framer') {
+                    aiCtx.fillStyle = '#0055FF';
+                    const sz = b.r * 0.6;
+                    aiCtx.beginPath();
+                    aiCtx.moveTo(-sz, -sz);
+                    aiCtx.lineTo(sz, -sz);
+                    aiCtx.lineTo(0, 0);
+                    aiCtx.closePath();
+                    aiCtx.fill();
+
+                    aiCtx.beginPath();
+                    aiCtx.moveTo(-sz, 0);
+                    aiCtx.lineTo(sz, 0);
+                    aiCtx.lineTo(-sz, sz);
+                    aiCtx.closePath();
+                    aiCtx.fill();
+
+                    aiCtx.beginPath();
+                    aiCtx.moveTo(0, 0);
+                    aiCtx.lineTo(sz, sz);
+                    aiCtx.lineTo(-sz, sz);
+                    aiCtx.closePath();
+                    aiCtx.fill();
+                } else if (b.type === 'stitch') {
+                    aiCtx.strokeStyle = '#FF4F00';
+                    aiCtx.lineWidth = b.r * 0.13;
+                    aiCtx.beginPath();
+                    aiCtx.ellipse(-b.r*0.2, 0, b.r*0.35, b.r*0.5, Math.PI/4, 0, Math.PI*2);
+                    aiCtx.stroke();
+                    aiCtx.strokeStyle = '#FFFFFF';
+                    aiCtx.beginPath();
+                    aiCtx.ellipse(b.r*0.2, 0, b.r*0.35, b.r*0.5, -Math.PI/4, 0, Math.PI*2);
+                    aiCtx.stroke();
+                }
+
+                aiCtx.restore();
+                aiCtx.restore();
+            }
+        }
+    </script>
+
+    <script>
+        // ----------------------------------------------------
+        // Footer Smiley rigid physics simulation engine
+        // ----------------------------------------------------
+        const footerCanvas = document.getElementById('footer-physics-canvas');
+        const fCtx = footerCanvas.getContext('2d');
+        let smileys = [];
+        let smileyMouse = { x: -1000, y: -1000, active: false };
+        
+        let textGlitchTime = 0;
+        let blastParticles = [];
+        let clickBlastWaves = [];
+
+        // Curated letter palette corresponding to the colorful pop video theme
+        const sumiLetterConfigs = [
+            { char: 'S', defaultColor: '#FFB5E8', hoverColor: '#FFF5BA', defaultRot: -0.12, hoverProgress: 0 },
+            { char: 'U', defaultColor: '#97A2FF', hoverColor: '#BFFCC6', defaultRot: 0.08, hoverProgress: 0 },
+            { char: 'M', defaultColor: '#FFC9DE', hoverColor: '#E8D7FF', defaultRot: -0.06, hoverProgress: 0 },
+            { char: 'I', defaultColor: '#AFECE7', hoverColor: '#FFD1A9', defaultRot: 0.14, hoverProgress: 0 }
+        ];
+
+        // Hex color interpolation helper
+        function lerpColor(color1, color2, factor) {
+            const r1 = parseInt(color1.substring(1, 3), 16);
+            const g1 = parseInt(color1.substring(3, 5), 16);
+            const b1 = parseInt(color1.substring(5, 7), 16);
+            
+            const r2 = parseInt(color2.substring(1, 3), 16);
+            const g2 = parseInt(color2.substring(3, 5), 16);
+            const b2 = parseInt(color2.substring(5, 7), 16);
+            
+            const r = Math.round(r1 + (r2 - r1) * factor);
+            const g = Math.round(g1 + (g2 - g1) * factor);
+            const b = Math.round(b1 + (b2 - b1) * factor);
+            
+            const rHex = r.toString(16).padStart(2, '0');
+            const gHex = g.toString(16).padStart(2, '0');
+            const bHex = b.toString(16).padStart(2, '0');
+            
+            return `#${rHex}${gHex}${bHex}`;
+        }
+
+        const smileyExpressions = [
+            '🙂', '😜', '😎', '😀', '😉', '😊', '😍', '🤩', '😐', '🤪'
+        ];
+
+        function resizeFooterCanvas() {
+            const footer = footerCanvas.parentElement;
+            footerCanvas.width = footer.clientWidth;
+            footerCanvas.height = footer.clientHeight;
+        }
+
+        function initFooterPhysics() {
+            resizeFooterCanvas();
+            smileys = [];
+            // Increased ball count for more dynamic collisions!
+            const ballCount = window.innerWidth < 640 ? 30 : 70;
+
+            for (let i = 0; i < ballCount; i++) {
+                const radius = Math.random() * 8 + 24; 
+                smileys.push({
+                    x: Math.random() * (footerCanvas.width - radius * 2) + radius,
+                    y: -Math.random() * 200 - radius,
+                    vx: (Math.random() - 0.5) * 5,
+                    vy: Math.random() * 2,
+                    r: radius,
+                    mass: radius * 0.2,
+                    restitution: 0.65,
+                    friction: 0.99,
+                    emoji: smileyExpressions[i % smileyExpressions.length],
+                    angle: Math.random() * Math.PI * 2,
+                    angularVelocity: (Math.random() - 0.5) * 0.05
+                });
+            }
+
+            // Click listener for particle explosion and physical ripples
+            footerCanvas.addEventListener('mousedown', (e) => {
+                const rect = footerCanvas.getBoundingClientRect();
+                const mX = e.clientX - rect.left;
+                const mY = e.clientY - rect.top;
+
+                playBlastSFX();
+
+                // Trigger chromatic jitter animation
+                textGlitchTime = 50; 
+
+                // Add expanding glowing shockwave ring
+                clickBlastWaves.push({
+                    x: mX,
+                    y: mY,
+                    r: 10,
+                    maxR: 350,
+                    alpha: 1.0
+                });
+
+                // Blast away smiley spheres physically
+                smileys.forEach(b => {
+                    const dx = b.x - mX;
+                    const dy = b.y - mY;
+                    const dist = Math.hypot(dx, dy);
+                    const forceRange = 380;
+                    if (dist < forceRange) {
+                        const pushForce = ((forceRange - dist) / forceRange) * 16;
+                        b.vx += (dx / (dist || 1)) * pushForce;
+                        b.vy += (dy / (dist || 1)) * pushForce - 4; // Add a bit of upward pop
+                        b.angularVelocity += (Math.random() - 0.5) * 0.6;
+                    }
+                });
+
+                // Spawn neon blast particles
+                const colors = ['#FFB5E8', '#97A2FF', '#FFC9DE', '#AFECE7', '#FFF5BA'];
+                const pCount = window.innerWidth < 640 ? 15 : 35;
+                for (let k = 0; k < pCount; k++) {
+                    const angle = Math.random() * Math.PI * 2;
+                    const speed = Math.random() * 8 + 3;
+                    blastParticles.push({
+                        x: mX,
+                        y: mY,
+                        vx: Math.cos(angle) * speed,
+                        vy: Math.sin(angle) * speed - 2, 
+                        r: Math.random() * 3.5 + 2,
+                        color: colors[Math.floor(Math.random() * colors.length)],
+                        alpha: 1.0,
+                        life: 1.0,
+                        decay: Math.random() * 0.02 + 0.01
+                    });
+                }
+            });
+
+            footerCanvas.addEventListener('mousemove', (e) => {
+                const rect = footerCanvas.getBoundingClientRect();
+                smileyMouse.x = e.clientX - rect.left;
+                smileyMouse.y = e.clientY - rect.top;
+                smileyMouse.active = true;
+            });
+
+            footerCanvas.addEventListener('mouseleave', () => {
+                smileyMouse.active = false;
+                smileyMouse.x = -1000;
+                smileyMouse.y = -1000;
+            });
+
+            // Touch support for mobiles
+            footerCanvas.addEventListener('touchmove', (e) => {
+                if (e.touches.length > 0) {
+                    const rect = footerCanvas.getBoundingClientRect();
+                    smileyMouse.x = e.touches[0].clientX - rect.left;
+                    smileyMouse.y = e.touches[0].clientY - rect.top;
+                    smileyMouse.active = true;
+                }
+            });
+
+            footerCanvas.addEventListener('touchend', () => {
+                smileyMouse.active = false;
+                smileyMouse.x = -1000;
+                smileyMouse.y = -1000;
+            });
+
+            updateFooterPhysics();
+        }
+
+        function updateFooterPhysics() {
+            const gravity = 0.28;
+            const subSteps = 6;
+
+            // Tracking and interpolating individual letter hover state vectors
+            const startX = footerCanvas.width / 2;
+            const centerY = footerCanvas.height / 2 - 20;
+            const spacing = window.innerWidth < 640 ? 100 : 180; 
+            const triggerRadius = window.innerWidth < 640 ? 60 : 100;
+
+            sumiLetterConfigs.forEach((letConf, idx) => {
+                const lx = (idx - 1.5) * spacing; 
+                const letterX = startX + lx;
+                const letterY = centerY;
+
+                let isHovered = false;
+                if (smileyMouse.active) {
+                    const dist = Math.hypot(smileyMouse.x - letterX, smileyMouse.y - letterY);
+                    if (dist < triggerRadius) {
+                        isHovered = true;
+                    }
+                }
+
+                if (isHovered) {
+                    letConf.hoverProgress += (1.0 - letConf.hoverProgress) * 0.16;
+                } else {
+                    letConf.hoverProgress += (0.0 - letConf.hoverProgress) * 0.08;
+                }
+            });
+
+            // Update expanding click ripples
+            for (let i = clickBlastWaves.length - 1; i >= 0; i--) {
+                const wave = clickBlastWaves[i];
+                wave.r += (wave.maxR - wave.r) * 0.12;
+                wave.alpha -= 0.04;
+                if (wave.alpha <= 0 || wave.r >= wave.maxR - 5) {
+                    clickBlastWaves.splice(i, 1);
+                }
+            }
+
+            // Update blast particles
+            for (let i = blastParticles.length - 1; i >= 0; i--) {
+                const p = blastParticles[i];
+                p.x += p.vx;
+                p.y += p.vy;
+                p.vy += 0.15; 
+                p.vx *= 0.98;
+                p.vy *= 0.98;
+                p.life -= p.decay;
+                if (p.life <= 0) {
+                    blastParticles.splice(i, 1);
+                }
+            }
+
+            for (let step = 0; step < subSteps; step++) {
+                for (let i = 0; i < smileys.length; i++) {
+                    const b = smileys[i];
+
+                    b.vy += gravity / subSteps;
+                    b.vx *= Math.pow(b.friction, 1 / subSteps);
+                    b.vy *= Math.pow(b.friction, 1 / subSteps);
+                    b.angularVelocity *= Math.pow(0.95, 1 / subSteps);
+
+                    b.x += b.vx / subSteps;
+                    b.y += b.vy / subSteps;
+                    b.angle += b.angularVelocity / subSteps;
+
+                    // Mouse pointer force pushes
+                    if (smileyMouse.active) {
+                        const dx = b.x - smileyMouse.x;
+                        const dy = b.y - smileyMouse.y;
+                        const dist = Math.hypot(dx, dy);
+                        const pushDist = b.r + 90;
+                        if (dist < pushDist && dist > 1) {
+                            const force = (pushDist - dist) * 0.06;
+                            b.vx += (dx / dist) * force;
+                            b.vy += (dy / dist) * force;
+                            b.angularVelocity += (dx > 0 ? 1 : -1) * force * 0.005;
+                        }
+                    }
+
+                    // Bottom constraint
+                    if (b.y + b.r > footerCanvas.height) {
+                        b.y = footerCanvas.height - b.r;
+                        b.vy = -Math.abs(b.vy) * b.restitution;
+                        b.vx *= 0.92;
+                        b.angularVelocity *= 0.90;
+                    }
+                    // Wall constraints
+                    if (b.x - b.r < 0) {
+                        b.x = b.r;
+                        b.vx = Math.abs(b.vx) * b.restitution;
+                        b.angularVelocity *= 0.90;
+                    }
+                    if (b.x + b.r > footerCanvas.width) {
+                        b.x = footerCanvas.width - b.r;
+                        b.vx = -Math.abs(b.vx) * b.restitution;
+                        b.angularVelocity *= 0.90;
+                    }
+
+                    // Sphere-to-sphere collisions
+                    for (let j = i + 1; j < smileys.length; j++) {
+                        const target = smileys[j];
+                        const dx = target.x - b.x;
+                        const dy = target.y - b.y;
+                        const dist = Math.hypot(dx, dy);
+                        const minDist = b.r + target.r;
+
+                        if (dist < minDist) {
+                            const overlap = minDist - dist;
+                            const normalX = dx / dist;
+                            const normalY = dy / dist;
+
+                            // Project displacement
+                            b.x -= normalX * overlap * 0.5;
+                            b.y -= normalY * overlap * 0.5;
+                            target.x += normalX * overlap * 0.5;
+                            target.y += normalY * overlap * 0.5;
+
+                            const kx = b.vx - target.vx;
+                            const ky = b.vy - target.vy;
+                            const vn = kx * normalX + ky * normalY;
+
+                            if (vn > 0) {
+                                const impulseScalar = (1 + b.restitution) * vn / (1/b.mass + 1/target.mass);
+                                b.vx -= (impulseScalar / b.mass) * normalX;
+                                b.vy -= (impulseScalar / b.mass) * normalY;
+                                target.vx += (impulseScalar / target.mass) * normalX;
+                                target.vy += (impulseScalar / target.mass) * normalY;
+
+                                // Rotational friction transfer
+                                const tx = -normalY;
+                                const ty = normalX;
+                                const vt = kx * tx + ky * ty;
+                                const tangentialImpulse = vt * 0.05;
+                                b.angularVelocity -= tangentialImpulse * 0.05;
+                                target.angularVelocity += tangentialImpulse * 0.05;
+                            }
+                        }
+                    }
+                }
+            }
+
+            renderFooterPhysics();
+            requestAnimationFrame(updateFooterPhysics);
+        }
+
+        function renderFooterPhysics() {
+            fCtx.clearRect(0, 0, footerCanvas.width, footerCanvas.height);
+
+            // 1. Draw Giant S U M I Bubbly Funky Typography (Upgraded for letter-by-letter dynamic size & color hover)
+            fCtx.save();
+            fCtx.textAlign = 'center';
+            fCtx.textBaseline = 'middle';
+            
+            // Super giant sizing as requested!
+            const fontScale = window.innerWidth < 640 ? "900 18vw" : "900 14vw";
+            fCtx.font = `${fontScale} 'Syne', sans-serif`;
+
+            const startX = footerCanvas.width / 2;
+            const centerY = footerCanvas.height / 2 - 20;
+            const spacing = window.innerWidth < 640 ? 100 : 180; 
+
+            fCtx.translate(startX, centerY);
+
+            sumiLetterConfigs.forEach((letConf, idx) => {
+                let displayChar = letConf.char;
+                let offsetX = 0;
+                let offsetY = 0;
+                let letterScale = 1.0;
+                
+                // Continuous subtle organic idle breathing jiggle
+                offsetY += Math.sin(Date.now() * 0.002 + idx) * 3;
+
+                // Handle interactive bouncy letter hover progress
+                const hoverProg = letConf.hoverProgress;
+                offsetY -= hoverProg * (window.innerWidth < 640 ? 18 : 35);
+                letterScale += hoverProg * 0.25;
+                let currentRotation = letConf.defaultRot + hoverProg * 0.4;
+
+                const lx = (idx - 1.5) * spacing; 
+                
+                fCtx.save();
+                fCtx.translate(lx + offsetX, offsetY);
+                fCtx.rotate(currentRotation);
+                fCtx.scale(letterScale, letterScale);
+                
+                // Funky Bubble Outline styling for quirky aesthetic
+                fCtx.strokeStyle = '#000000';
+                fCtx.lineWidth = window.innerWidth < 640 ? 7 : 14;
+                fCtx.strokeText(displayChar, 0, 0);
+
+                // Main Typography Render (Lerp between default vibrant color & hover color)
+                fCtx.fillStyle = lerpColor(letConf.defaultColor, letConf.hoverColor, hoverProg);
+                fCtx.fillText(displayChar, 0, 0);
+                fCtx.restore();
+            });
+
+            fCtx.restore();
+
+            // 2. Draw expanding physical shockwave ripple rings
+            clickBlastWaves.forEach(wave => {
+                fCtx.save();
+                fCtx.beginPath();
+                fCtx.arc(wave.x, wave.y, wave.r, 0, Math.PI * 2);
+                fCtx.strokeStyle = `rgba(46, 229, 157, ${wave.alpha * 0.4})`;
+                fCtx.lineWidth = 4 * wave.alpha;
+                fCtx.shadowColor = '#2EE59D';
+                fCtx.shadowBlur = 15;
+                fCtx.stroke();
+                fCtx.restore();
+            });
+
+            // 3. Render interactive smiley spheres
+            for (let i = 0; i < smileys.length; i++) {
+                const b = smileys[i];
+
+                fCtx.save();
+                fCtx.translate(b.x, b.y);
+                fCtx.rotate(b.angle);
+
+                // Sphere shading base
+                fCtx.beginPath();
+                fCtx.arc(0, 0, b.r, 0, Math.PI * 2);
+                fCtx.fillStyle = '#FFFDF6'; 
+                fCtx.shadowColor = 'rgba(0,0,0,0.4)';
+                fCtx.shadowBlur = 12;
+                fCtx.shadowOffsetY = 6;
+                fCtx.fill();
+                fCtx.shadowBlur = 0;
+                fCtx.shadowOffsetY = 0;
+
+                // Border stroke
+                fCtx.strokeStyle = '#000000';
+                fCtx.lineWidth = 2.5;
+                fCtx.stroke();
+
+                // Draw Emoji expressions
+                fCtx.fillStyle = '#000000';
+                fCtx.font = `${b.r * 1.0}px sans-serif`;
+                fCtx.textBaseline = 'middle';
+                fCtx.textAlign = 'center';
+                fCtx.fillText(b.emoji, 0, 1);
+
+                fCtx.restore();
+            }
+
+            // 4. Render lightweight blast particles
+            blastParticles.forEach(p => {
+                fCtx.save();
+                fCtx.globalAlpha = p.life;
+                fCtx.beginPath();
+                fCtx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                fCtx.fillStyle = p.color;
+                fCtx.shadowColor = p.color;
+                fCtx.shadowBlur = 8;
+                fCtx.fill();
+                fCtx.restore();
+            });
+        }
+
+        // Bouncy letter utility helper for Hero sections
+        function makeBouncyText(selector) {
+            const el = document.querySelector(selector);
+            if (!el) return;
+            const text = el.textContent;
+            el.innerHTML = '';
+            // Curated colorful palette matching video
+            const colors = ['#FFB5E8', '#BFFCC6', '#FFC9DE', '#FFD1A9', '#E8D7FF', '#97A2FF', '#AFECE7', '#FFF5BA'];
+            
+            [...text].forEach((char, idx) => {
+                const span = document.createElement('span');
+                span.textContent = char;
+                if (char !== ' ') {
+                    span.className = 'bounce-char';
+                    const hoverColor = colors[idx % colors.length];
+                    const randRot = ((Math.random() - 0.5) * 26).toFixed(1) + 'deg';
+                    span.style.setProperty('--hover-color', hoverColor);
+                    span.style.setProperty('--rand-rot', randRot);
+                    
+                    // Assign random default colors just like the colorful video style
+                    span.style.color = colors[(idx + 2) % colors.length];
+                } else {
+                    span.style.display = 'inline-block';
+                    span.style.width = '0.28em';
+                }
+                el.appendChild(span);
+            });
+        }
+
+        // Window onload loader and trigger stagger entrance animation
+        window.onload = function() {
+            resizeCanvas();
+            animateCanvas();
+            initAiPhysics();
+            initFooterPhysics();
+            initDraggableSlider();
+            switchTestimonial(0);
+
+            // Dynamically transform hero phrases into colorful bouncy interactive words
+            makeBouncyText('#hero-phrase-1');
+            makeBouncyText('#hero-phrase-2');
+            makeBouncyText('#hero-phrase-3');
+
+            // Staggered loading and system calibration progress bar
+            setTimeout(() => {
+                const loaderBar = document.getElementById('loader-bar');
+                const loaderPercent = document.getElementById('loader-percent');
+                const pageLoader = document.getElementById('page-loader');
+                
+                let progress = 0;
+                const interval = setInterval(() => {
+                    progress += Math.floor(Math.random() * 15) + 5;
+                    if (progress >= 100) {
+                        progress = 100;
+                        clearInterval(interval);
+                        loaderBar.style.width = '100%';
+                        loaderPercent.innerText = 'CALIBRATION COMPLETE 100%';
+                        
+                        setTimeout(() => {
+                            // Play digital success chime
+                            playEntryChime();
+                            // Gracefully fade out loader
+                            pageLoader.classList.add('opacity-0', 'pointer-events-none');
+                            
+                            // Stagger slide up header, cards, and title elements elegantly
+                            setTimeout(() => {
+                                document.querySelectorAll('.entrance-stagger').forEach((el, idx) => {
+                                    setTimeout(() => {
+                                        el.classList.remove('opacity-0', 'translate-y-8');
+                                    }, idx * 150);
+                                });
+                            }, 450);
+                        }, 500);
+                    } else {
+                        loaderBar.style.width = progress + '%';
+                        loaderPercent.innerText = 'CALIBRATING SYSTEM ' + progress.toString().padStart(2, '0') + '%';
+                    }
+                }, 80);
+            }, 100);
+        };
+
+        window.onresize = function() {
+            resizeCanvas();
+            resizeAiCanvas();
+            resizeFooterCanvas();
+        };
+
+        function copyEmail() {
+            const email = '17763473292@163.com';
+            const el = document.createElement('textarea');
+            el.value = email;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+            showToast("Copied Sumi's Email directly! ✉️");
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastText = document.getElementById('toast-text');
+            toastText.innerText = message;
+
+            toast.classList.remove('opacity-0', 'translate-y-10', 'pointer-events-none');
+            toast.classList.add('opacity-100', 'translate-y-0');
+
+            setTimeout(() => {
+                toast.classList.remove('opacity-100', 'translate-y-0');
+                toast.classList.add('opacity-0', 'translate-y-10', 'pointer-events-none');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
