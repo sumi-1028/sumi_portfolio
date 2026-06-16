@@ -163,11 +163,11 @@
             </a>
 
             <!-- Double-face Hover-Reveal Email Pill button -->
-            <button onclick="copyEmail()" class="group relative overflow-hidden px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider border border-white/10 bg-white/5 text-zinc-200 transition-all duration-300 w-52 h-10 flex items-center justify-center">
-                <span class="absolute inset-0 flex items-center justify-center transition-all duration-300 ease-out group-hover:translate-y-10 group-hover:opacity-0 font-mono tracking-tight text-[11px]">
-                    17763473292@163.com
+            <button onclick="copyEmail()" class="group relative overflow-hidden px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-widest border border-zinc-800 bg-black min-w-[200px] h-[42px]">
+                <span class="absolute inset-0 flex items-center justify-center text-white bg-zinc-900 transition-all duration-300 ease-out transform translate-y-full group-hover:translate-y-0">
+                     17763473292@163.com
                 </span>
-                <span class="absolute inset-0 bg-[#FFFDF6] text-[#0A0A0A] flex items-center justify-center gap-2 font-black tracking-widest translate-y-[-40px] opacity-0 transition-all duration-300 ease-out group-hover:translate-y-0 group-hover:opacity-100 shadow-lg">
+                <span class="absolute inset-0 bg-[#FFFDF6] text-[#0A0A0A] flex items-center justify-center gap-2 font-black transition-all duration-300 ease-out transform translate-y-0 group-hover:-translate-y-full">
                     COPY EMAIL <i class="fa-solid fa-copy text-[10px]"></i>
                 </span>
             </button>
@@ -194,7 +194,6 @@
 
             <div class="entrance-stagger opacity-0 translate-y-8 flex items-center gap-3">
                 <span class="text-xs uppercase tracking-[0.4em] font-semibold text-zinc-500 block">
-                    [ ACT I: PROLOGUE ]
                 </span>
                 <span class="h-[1px] w-12 bg-zinc-800"></span>
                 <span class="text-[10px] font-mono text-indigo-400 bg-indigo-500/10 px-2.5 py-1 rounded-full uppercase tracking-widest font-bold flex items-center gap-1.5">
@@ -238,8 +237,6 @@
             <div class="hidden sm:block">GPA 3.7 · QILU UNIVERSITY OF TECHNOLOGY © 2026</div>
         </div>
     </section>
-
-    <!-- Act II: Wavy Portfolio Cards & UI Screen Showcase Section -->
     <section id="case-studies" class="relative py-24 px-6 md:px-12 lg:px-20 border-t border-white/5 z-10 bg-[#0F0F12] overflow-hidden w-full">
         <div class="max-w-[1600px] mx-auto space-y-20">
             
@@ -624,7 +621,7 @@
         <!-- Sticky Header Controls -->
         <div class="sticky top-0 z-[130] bg-[#0A0A0A]/95 backdrop-blur-md px-6 md:px-12 py-4 flex justify-between items-center border-b border-b-white/5">
             <span class="font-syne text-xs text-zinc-400 tracking-[0.25em] uppercase font-bold">PROJECT CASE STUDY // SYSTEM DESIGN MATRIX</span>
-            <button onclick="closeProjectDetail()" class="text-zinc-400 hover:text-white flex items-center gap-1.5 text-xs bg-white/5 px-5 py-2.5 rounded-full border border-white/10 transition-all hover:bg-white/10">
+            <button onclick="closeProjectDetail()" class="text-black hover:bg-zinc-200 flex items-center gap-1.5 text-xs bg-white px-5 py-2 rounded-full transition-colors">
                 <i class="fa-solid fa-arrow-left"></i> Close & Back
             </button>
         </div>
@@ -1084,7 +1081,14 @@
                         imgLabel: '作品集.pdf - Page 11 & 12 (Engineering Patents, Arduino Coding & Structural Explosions)',
                     },
                     {
-                        phase: 'Phase 6: Final Delivery & Ecosystem Blueprint',
+                        phase: 'Phase 6: Sketch, Prototype & Scenario Application',
+                        heading: '从手绘设计手稿到多模块高精度软硬一体物理原型演进',
+                        content: '本阶段聚焦于 NEURAGUT 双穿戴系统的硬件结构与生命周期场景设计探索。左侧设计探索（Sketch）部分通过纸面手绘，详尽规划了穿戴构型、自适应伸缩调节器与传感器触点，切实保障轻量化的穿戴舒适度；右侧硬件架构（Prototype）则通过严丝合缝的硬件爆炸图展示核心系统，其中智能头带集成空间姿态传感、高敏干式 EEG 传感器与超亲肤织物外壳，智能腰带则集成了柔性拉伸腹部电极、阻抗模块与多通道闭环热源；右侧边缘更模拟了户外动态跑动、办公高压自救中和、以及高龄老人静息睡眠无感监护三大全生命周期场景，有力论证了生理调控在多元环境中的临床普适性。',
+                        imgSrc: 'image_page12.jpg', 
+                        imgLabel: '作品集.pdf - Page 11 & 12 (Engineering Patents, Arduino Coding & Structural Explosions)',
+                    },
+                    {
+                        phase: 'Phase 7: Final Delivery & Ecosystem Blueprint',
                         heading: '双端高保真健康管理平台与无缝服务蓝图交付',
                         content: '展现全生命周期的 App 高保真界面流程设计（涵盖健康指数测定、紧急自救声波呼吸放松引导、长期排便追踪、医患云端协同）。配合底层严丝合缝的服务蓝图（Service Blueprint），全面规范前、后台服务节点，完美收尾。',
                         imgSrc: 'image_page13.jpg', 
@@ -2335,9 +2339,9 @@
                                 const tx = -normalY;
                                 const ty = normalX;
                                 const vt = kx * tx + ky * ty;
-                                const tangentialImpulse = vt * 0.05;
-                                b.angularVelocity -= tangentialImpulse * 0.05;
-                                target.angularVelocity += tangentialImpulse * 0.05;
+                                const tangentialImpulse = vt * 0.7;
+                                b.angularVelocity -= tangentialImpulse * 0.7;
+                                target.angularVelocity += tangentialImpulse * 0.7;
                             }
                         }
                     }
